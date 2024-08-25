@@ -1,10 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
 import './index.css'
 import About from './components/About.jsx'
 import Contact from'./components/Contact'
-import Profile from'./components/Profile.jsx'
+import Login from './components/Login.jsx'
 import Homepage from'./components/Homepage.jsx'
 
 
@@ -23,8 +22,8 @@ const router = createBrowserRouter([
     element: <About/>
     },
     {
-      path: "/profile",
-    element: <Profile/>
+      path: "/login",
+    element: <Login/>
     },
     {
       path: "/contact",

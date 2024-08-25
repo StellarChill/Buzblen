@@ -2,10 +2,10 @@ import React from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
-function Profile() {
+function Login() {
   return <>
     <Navbar/>
-  <h1>This is Profile page</h1>
+  <h1>This is login page</h1>
   <Footer/>
     
   </>
@@ -13,4 +13,4 @@ function Profile() {
   
 }
 
-export default Profile
+export default Login
