@@ -6,7 +6,7 @@ function Contact() {
    <Navbar/>
   <h1>this is Contact page</h1>
   <Footer/>
-  <p>hello world</p>
+  
   </>
 }
 
