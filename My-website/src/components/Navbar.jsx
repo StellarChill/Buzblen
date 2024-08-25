@@ -45,6 +45,7 @@ function Navbar() {
         </div>
       </div>
       <div className="navbar-center">
+        
         <div className="btn btn-ghost text-x-3">Buzzblen</div>
       </div>
       <div className="navbar-end">
