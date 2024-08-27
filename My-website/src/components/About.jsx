@@ -11,10 +11,7 @@ const About = () => {
       
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Story</h2>
-        <p>
-          Founded in [Year], [Your Brand Name] started with a simple idea: [Brief history and reason for starting].
-          Today, we're proud to [briefly state what you do now].
-        </p>
+       
       </section>
       
       <section className="mb-6">
