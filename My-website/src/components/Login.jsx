@@ -10,7 +10,7 @@ const Login = () => {
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
           <form>
             <div className="mb-6">
-              <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-black">Email </label>
+              <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-black">Email address</label>
               <input
                 type="email"
                 id="email"
