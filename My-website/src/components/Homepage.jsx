@@ -5,6 +5,7 @@ import PostForm from './Post'
 
 function Homepage() {
   return <>
+  <Navbar/>
   <PostForm/>
   </>
 }
