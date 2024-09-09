@@ -11,7 +11,7 @@ const Register = () => {
           <form>
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
-                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-black dark:text-black">First name</label>
+                <label htmlFor="----" className="block mb-2 text-sm font-medium text-black dark:text-black">First name</label>
                 <input
                   type="text"
                   id="first_name"
@@ -48,7 +48,7 @@ const Register = () => {
                   className="bg-white border border-gray-300 text-gray text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 >
-                  <option value="" disabled>Select your gender</option>
+                  
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
