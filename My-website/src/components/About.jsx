@@ -37,12 +37,12 @@ const About = () => {
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Achievements</h2>
-        <p>We're honored to have received [list any awards or recognitions].</p>
+        <p>We are honored to have created this project. I hope you guys are happy with this website.</p>
       </section>
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Get in Touch</h2>
-        <p>We'd love to hear from you! Reach out to us at [contact info] or follow us on social media.</p>
+        <p>We'd love to hear from you! Reach out to us at [Tel. 084-486-5720] or follow us on social media.</p>
       </section>
     </div>
     
