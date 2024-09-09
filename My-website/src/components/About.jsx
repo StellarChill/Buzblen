@@ -19,8 +19,8 @@ const About = () => {
       
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Mission & Vision</h2>
-        <p><strong>Mission:</strong> To [your mission].</p>
-        <p><strong>Vision:</strong> To [your vision].</p>
+        <p><strong>Mission:</strong> To Our goal in creating this website is to allow users to exchange information.</p>
+        <p><strong>Vision:</strong> To We hope that everyone will enjoy the website we have created and have fun using it..</p>
       </section>
       
       <section className="mb-6">
