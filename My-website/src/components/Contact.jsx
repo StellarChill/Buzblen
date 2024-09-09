@@ -5,7 +5,7 @@ function Contact() {
   return <> 
    <Navbar/>
    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
+      <h1 className="text-3xl font-bold mb-4" >Let Get To Know About Us :v </h1>
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Soo Hello guys</h2>
@@ -37,7 +37,7 @@ function Contact() {
                 type="text"
                 id="name"
                 className="w-full mt-2 p-2 border rounded-lg"
-                placeholder="John Doe"
+                placeholder="Buzzblen"
                 required
               />
             </div>
@@ -47,7 +47,7 @@ function Contact() {
                 type="email"
                 id="email"
                 className="w-full mt-2 p-2 border rounded-lg"
-                placeholder="johndoe@example.com"
+                placeholder="BuzzblenOfficial@gmail.com"
                 required
               />
             </div>
@@ -57,12 +57,12 @@ function Contact() {
                 id="message"
                 className="w-full mt-2 p-2 border rounded-lg"
                 rows="5"
-                placeholder="Type your message here..."
+                placeholder="Tell me what you want ..."
                 required
               ></textarea>
             </div>
             <button
-              type="submit"
+              type="SEND"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none"
             >
               Send Message
@@ -73,14 +73,14 @@ function Contact() {
 
       {/* Optional: Embed a map */}
       <section className="mb-6">
-        <h3 className="text-xl font-semibold">Our Location</h3>
+        <h3 className="text-xl font-semibold">and this is my whole world</h3>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3163.056708923877!2d-122.08424968469135!3d37.42199977982526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb5d93d4162b1%3A0x4a36b8b6c8960!2sGoogleplex!5e0!3m2!1sen!2sus!4v1632172940037!5m2!1sen!2sus"
           width="100%"
           height="400"
           allowFullScreen=""
           loading="lazy"
-          title="Our Location"
+          title="and this is my whole world"
         ></iframe>
       </section>
     </div>
