@@ -12,8 +12,8 @@ const About = () => {
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Story</h2>
         <p>
-          Founded in [Year], [Your Brand Name] started with a simple idea: [Brief history and reason for starting].
-          Today, we're proud to [briefly state what you do now].
+          Founded in 2024, Buzzblen started with a simple idea: Our Buzzblen was created as a result of this project to allow everyone to present interesting and knowledgeable information that can be shared with others.
+          Today we're proud to showcase what we've done to ensure that everyone who visits our website is interested and happy to use it.
         </p>
       </section>
       
@@ -25,8 +25,14 @@ const About = () => {
       
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Team</h2>
-        <p>Meet the people behind [Your Brand Name].</p>
-        {/* You can add team member profiles here */}
+        <p>Meet the people behind Buzzblen.<br></br>
+          นาย เฉลิมชัย หาญคง<br></br>
+          นางสาว มาริยา วรรณรัตน์<br></br>
+          นางสาว กฤตธีรนันท์ สุภิมล<br></br>
+          นาย วีรภัทร สงสุวรรณ<br></br>
+          นาย รชต สินธุธนะรุจน์<br></br>
+        </p>
+       
       </section>
 
       <section className="mb-6">
