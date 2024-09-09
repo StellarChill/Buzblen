@@ -24,12 +24,13 @@ function Footer() {
       </p>
     </aside>
     <nav>
+
       <div 
-        style={{color:"white",fontSize: 20,marginLeft: '-500px',marginBottom:"10px"}}>Social
+        style={{color:"white",fontSize: 20,position: 'relative', top: '-2px', left: '-350px'}}>Social
       </div>
       <div className="grid grid-flow-col gap-4">
         <a>
-          <svg style={{ marginLeft: '-500px',color:"white" }}
+          <svg style={{ position: 'relative', top: '10px', left: '-350px',color:"white" }}
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -43,7 +44,7 @@ function Footer() {
         <a>
           <br />
           <br />
-          <svg style={{ marginLeft: '-517px',color:"white" }} 
+          <svg style={{ position: 'relative', top: '10px', left: '-390px',color:"white" }} 
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -60,7 +61,7 @@ function Footer() {
           <br />
           <br />
           <svg  
-            style={{ marginLeft: '-535px' ,color:"white"}}
+            style={{ position: 'relative', top: '10px', left: '-430px' ,color:"white"}}
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -72,14 +73,21 @@ function Footer() {
         </a>
       </div>
       <div 
-        style={{color:"white",fontSize: 20,marginLeft: '-450px',marginTop:"-112px"}}>Buzzblen.official
-      </div><div 
-        style={{color:"white",fontSize: 20,marginLeft: '-450px',marginTop:"-79px"}}>Buzzblen.official
-      </div><div 
-        style={{color:"white",fontSize: 20,marginLeft: '-450px',marginTop:"-50x"}}>Buzzblen.official
+        style={{color:"white",fontSize: 20,position: 'relative', top: '-100px', left: '-300px'}}>Buzzblen.official
       </div>
+      <div 
+        style={{color:"white",fontSize: 20,position: 'relative', top: '-88px', left: '-300px'}}>Buzzblen.official
+      </div>
+      <div
+        style={{color:"white",fontSize: 20,position: 'relative', top: '-76px', left: '-300px'}}>Buzzblen.official
+      </div>
+
+
+    
     </nav>
   </footer>
+    
+   
   )
 }
 

@@ -7,7 +7,7 @@ const Register = () => {
     <>
       <Navbar />
       <div className="container mx-auto p-4 md:p-6">
-        <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
+        <div style={{background:"#c6b790"}}className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
           <form>
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
@@ -96,11 +96,12 @@ const Register = () => {
                 />
               </div>
               <label htmlFor="remember" className="ms-2 text-sm font-medium text-black dark:text-black">
-                I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-400">terms and conditions</a>.
+                I agree with the <a href="#" style={{color:"black"}}className="text-blue-600 hover:underline dark:text-blue-400">terms and conditions</a>.
               </label>
             </div>
             <button
               type="submit"
+              style={{background:"#8d6f22"}}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Submit
