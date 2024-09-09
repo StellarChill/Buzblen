@@ -8,23 +8,22 @@ function Contact() {
       <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
 
       <section className="mb-6">
-        <h2 className="text-2xl font-semibold">Get in Touch</h2>
-        <p>If you have any questions, feel free to reach out to us. We’re here to help!</p>
+        <h2 className="text-2xl font-semibold">Soo Hello guys</h2>
+        <p>If you want to contact us, you can see below. we are ready to listen and fix it</p>
       </section>
 
       <section className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-xl font-semibold">Contact Information</h3>
-          <p><strong>Address:</strong> 1234 Street Name, City, Country</p>
-          <p><strong>Phone:</strong> +123 456 7890</p>
-          <p><strong>Email:</strong> contact@yourdomain.com</p>
+          <h3 className="text-xl font-semibold">Contact Information!</h3>
+          <p><strong>Address:</strong>110/1-4 Pracha Chuen Road, Lak Si District, Bangkok, Thailand</p>
+          <p><strong>Phone:</strong> +66 92 959 6758</p>
+          <p><strong>Email:</strong> BuzzblenOfficial@gmail.com</p>
           <div className="mt-4">
-            <h3 className="text-xl font-semibold">Follow Us</h3>
+            <h3 className="text-xl font-semibold">if you want to know more let's follow us</h3>
             <ul className="flex space-x-4 mt-2">
-              <li><a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-              <li><a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer">Twitter</a></li>
-              <li><a href="https://instagram.com/yourprofile" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-              {/* Add more social links as needed */}
+              <li><a href="https://facebook.com/Buzzblen.official" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+              <li><a href="https://twitter.com/Buzzblen.official" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+              <li><a href="https://instagram.com/Buzzblen.official" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             </ul>
           </div>
         </div>
