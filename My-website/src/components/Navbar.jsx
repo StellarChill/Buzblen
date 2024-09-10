@@ -1,20 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
+
 function Navbar() {
   return (
-    <div className="navbar bg-base-100">
+  
+    <div style={{background:"#663c2c",padding:40}}className="navbar bg-base-100"> 
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-8 w-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
+              <path  //3ขีดบน//
+                style={{color:"white"}}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
@@ -22,7 +26,7 @@ function Navbar() {
               />
             </svg>
           </div>
-          <ul
+          <ul  //ตัวเลือกไปหน้าอื่น//
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
@@ -46,18 +50,20 @@ function Navbar() {
       </div>
       <div className="navbar-center">
         
-        <div className="btn btn-ghost text-x-3">Buzzblen</div>
+        <div style={{fontSize: 50, color: "#ffd230"}}className="btn btn-ghost text-x-3">BUZZBLEN</div>    
       </div>
-      <div className="navbar-end">
+      
+      <div style={{color:"white"}}className="navbar-end"> 
         <button className="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
+            className="h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
             <path
+              style={{ width: 'fit-content', height: 'fit-content',display: 'inline-block' }} //กอบ//
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
@@ -73,12 +79,13 @@ function Navbar() {
         <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <svg
-              className="h-5 w-5"
+              className="h-8 w-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
+              <path //แจ้งเตือน//
+                style={{color:"white"}}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
@@ -90,6 +97,7 @@ function Navbar() {
         </button>
       </div>
     </div>
+  
   );
 }
 
