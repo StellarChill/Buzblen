@@ -24,13 +24,21 @@ function Footer() {
       </p>
     </aside>
     <nav>
-
-      <div 
+        <div style={{justifyContent: 'space-between', display: "flex", marginTop: '-2px', marginLeft: '200px', gap: "340px"}} >
+          <div>     
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>Social</div>
+          </div>
+            
+          <div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>Tel</div>
+          </div>
+        </div>
+      {/* <div 
         style={{color:"white",fontSize: 20,position: 'relative', top: '-2px', left: '-350px'}}>Social
-      </div>
+      </div> */}
       <div className="grid grid-flow-col gap-4">
         <a>
-          <svg style={{ position: 'relative', top: '10px', left: '-350px',color:"white" }}
+          <svg style={{ position: 'relative', top: '10px', left: '170px',color:"white" }}
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -44,7 +52,7 @@ function Footer() {
         <a>
           <br />
           <br />
-          <svg style={{ position: 'relative', top: '10px', left: '-390px',color:"white" }} 
+          <svg style={{ position: 'relative', top: '10px', left: '130px',color:"white" }} 
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -61,7 +69,7 @@ function Footer() {
           <br />
           <br />
           <svg  
-            style={{ position: 'relative', top: '10px', left: '-430px' ,color:"white"}}
+            style={{ position: 'relative', top: '10px', left: '90px' ,color:"white"}}
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -72,17 +80,20 @@ function Footer() {
           </svg>
         </a>
       </div>
-      <div 
-        style={{color:"white",fontSize: 20,position: 'relative', top: '-100px', left: '-300px'}}>Buzzblen.official
-      </div>
-      <div 
-        style={{color:"white",fontSize: 20,position: 'relative', top: '-88px', left: '-300px'}}>Buzzblen.official
-      </div>
-      <div
-        style={{color:"white",fontSize: 20,position: 'relative', top: '-76px', left: '-300px'}}>Buzzblen.official
-      </div>
-
-
+        <div style={{justifyContent: 'space-between', display: "flex", marginTop: '-110px', marginLeft: '200px', gap: "250px"}} >
+          <div>     
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>Buzzblen.official</div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>Buzzblen.official</div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>Buzzblen.official</div>
+          </div>
+            
+          <div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>092-096-3174</div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>084-486-5720</div>
+            <div style={{color:"white",fontSize: 20,position: 'relative',padding: "10px"}}>098-777-7777</div>
+          </div>
+        </div>
+        <div style={{color:"white",fontSize: 50,position: 'relative',padding: "10px",marginLeft:"900px",marginTop:"-130px"}}> Buzzblen always <br/><br /><br/> be your side </div>
     
     </nav>
   </footer>
