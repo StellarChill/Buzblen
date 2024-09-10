@@ -12,31 +12,37 @@ const About = () => {
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Story</h2>
         <p>
-          Founded in [Year], [Your Brand Name] started with a simple idea: [Brief history and reason for starting].
-          Today, we're proud to [briefly state what you do now].
+          Founded in 2024, Buzzblen started with a simple idea: Our Buzzblen was created as a result of this project to allow everyone to present interesting and knowledgeable information that can be shared with others.
+          Today we're proud to showcase what we've done to ensure that everyone who visits our website is interested and happy to use it.
         </p>
       </section>
       
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Mission & Vision</h2>
-        <p><strong>Mission:</strong> To [your mission].</p>
-        <p><strong>Vision:</strong> To [your vision].</p>
+        <p><strong>Mission:</strong> To Our goal in creating this website is to allow users to exchange information.</p>
+        <p><strong>Vision:</strong> To We hope that everyone will enjoy the website we have created and have fun using it..</p>
       </section>
       
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Team</h2>
-        <p>Meet the people behind [Your Brand Name].</p>
-        {/* You can add team member profiles here */}
+        <p>Meet the people behind Buzzblen.<br></br>
+          นาย เฉลิมชัย หาญคง<br></br>
+          นางสาว มาริยา วรรณรัตน์<br></br>
+          นางสาว กฤตธีรนันท์ สุภิมล<br></br>
+          นาย วีรภัทร สงสุวรรณ<br></br>
+          นาย รชต สินธุธนะรุจน์<br></br>
+        </p>
+       
       </section>
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Achievements</h2>
-        <p>We're honored to have received [list any awards or recognitions].</p>
+        <p>We are honored to have created this project. I hope you guys are happy with this website.</p>
       </section>
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Get in Touch</h2>
-        <p>We'd love to hear from you! Reach out to us at [contact info] or follow us on social media.</p>
+        <p>We'd love to hear from you! Reach out to us at [Tel. 084-486-5720] or follow us on social media.</p>
       </section>
     </div>
     
