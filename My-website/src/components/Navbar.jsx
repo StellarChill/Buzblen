@@ -1,12 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-
+import './Navbar1.css';
 
 function Navbar() {
   return (
-  
-    <div style={{background:"#663c2c",padding:40}}className="navbar bg-base-100"> 
+    <div style={{padding:40}} className="navbarss"> 
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
