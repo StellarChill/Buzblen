@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 function PostForm() {
   const [text, setText] = useState('');
@@ -185,6 +187,7 @@ function PostForm() {
                 onClick={() => handleLike(post.id)}
                 className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 mr-2"
               >
+                <FontAwesomeIcon icon={faHeart} className="mr-2" />
                 Like ({post.likes})
               </button>
               <button
