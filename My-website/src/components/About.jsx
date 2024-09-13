@@ -6,7 +6,7 @@ const About = () => {
   return ( <>
 
   <Navbar/>
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" color='brown'>
       <h1 className="text-3xl font-bold mb-4">About Us</h1>
       
       <section className="mb-6">
