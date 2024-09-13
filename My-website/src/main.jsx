@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
 import About from './components/About.jsx'
 import Contact from'./components/Contact'
 import Login from './components/Login.jsx'
 import Homepage from'./components/Homepage.jsx'
+
 
 
 import {

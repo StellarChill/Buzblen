@@ -85,7 +85,7 @@ function Contact() {
         ></iframe>
       </section>
     </div>
-  <Footer/>
+ 
   
   </>
 }
