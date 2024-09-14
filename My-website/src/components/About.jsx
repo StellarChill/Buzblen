@@ -30,7 +30,7 @@ const About = () => {
         Miss Mariya Wannarat<br></br>
         Miss Kritthiranan Supimon<br></br>
         Mr. Weerapat Songsuwan<br></br>
-        <br></br>
+        Mr. Rachata Sinthuthanaruj<br></br>
         </p>
        
       </section>
