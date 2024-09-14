@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from './Navbar'
-import Footer from './Footer'
 
 const About = () => {
   return ( <>
 
+  
   <Navbar/>
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" color='brown'>
       <h1 className="text-3xl font-bold mb-4">About Us</h1>
       
       <section className="mb-6">
@@ -26,11 +26,11 @@ const About = () => {
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Our Team</h2>
         <p>Meet the people behind Buzzblen.<br></br>
-          นาย เฉลิมชัย หาญคง<br></br>
-          นางสาว มาริยา วรรณรัตน์<br></br>
-          นางสาว กฤตธีรนันท์ สุภิมล<br></br>
-          นาย วีรภัทร สงสุวรรณ<br></br>
-          นาย รชต สินธุธนะรุจน์<br></br>
+        Mr. Chalermchai Harnkong<br></br>
+        Miss Mariya Wannarat<br></br>
+        Miss Kritthiranan Supimon<br></br>
+        Mr. Weerapat Songsuwan<br></br>
+        Mr. Rachata Sinthuthanaruj<br></br>
         </p>
        
       </section>
@@ -45,6 +45,7 @@ const About = () => {
         <p>We'd love to hear from you! Reach out to us at [Tel. 084-486-5720] or follow us on social media.</p>
       </section>
     </div>
+
     
     </>
   );
