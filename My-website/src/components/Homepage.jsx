@@ -8,6 +8,17 @@ function Homepage() {
   <br />
   <PostForm/>
   <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
   <Footer/>
   </>
 }
