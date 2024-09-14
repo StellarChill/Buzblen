@@ -9,7 +9,6 @@ function Homepage() {
   <PostForm/>
   <br />
   <Footer/>
- 
   </>
 }
 
