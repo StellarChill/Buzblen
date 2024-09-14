@@ -1,7 +1,8 @@
 import React from 'react'
-
+import  "../cssfile/Footer.css"
 function Footer() {
   return (
+<<<<<<< HEAD
     <footer style={{background:"#663c2c",padding:40}}className="footer bg-neutral text-neutral-content p-10">
     <aside>
       {/* <svg
@@ -100,6 +101,12 @@ function Footer() {
         <div style={{color:"white",fontSize: 50,position: 'relative',padding: "10px",marginLeft:"900px",marginTop:"-130px"}}> Buzzblen always <br/><br /><br/> be your side </div>
     
     </nav>
+=======
+    <footer className="footer footer-center  text-base-content p-4">
+    <aside>
+      <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>
+    </aside>
+>>>>>>> cf276d4782ce864304d06118783d89fe83932b1f
   </footer>
     
    
