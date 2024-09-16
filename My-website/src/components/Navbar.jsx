@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../cssfile/Navbar1.css"
+import './Navbar1.css';
 
 function Navbar() {
   return (
-  
-    <div className="navbar11 navbar bg-base-100"> 
+    <div style={{padding:40}} className="navbarss"> 
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -49,7 +48,7 @@ function Navbar() {
       </div>
       <div className="navbar-center">
         
-        <div style={{fontSize: 35, color: "#ffd230"}}className="btn btn-ghost text-x-3">BUZZBLEN</div>    
+        <div style={{fontSize: 50, color: "#ffd230"}}className="btn btn-ghost text-x-3">BUZZBLEN</div>    
       </div>
       
       <div style={{color:"white"}}className="navbar-end"> 

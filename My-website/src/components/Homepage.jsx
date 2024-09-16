@@ -6,10 +6,7 @@ import Footer from './Footer'
 function Homepage() {
   return <>
   <Navbar/>
-  <br />
   <PostForm/>
- 
-
   <br />
   <br />
   <br />
@@ -23,6 +20,7 @@ function Homepage() {
   <br />
   <br />
   <Footer/> 
+
   </>
 }
 
