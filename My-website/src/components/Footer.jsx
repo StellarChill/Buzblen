@@ -8,6 +8,6 @@ function Footer() {
     </aside>
   </footer>
   )
-}
+} 
 
 export default Footer
