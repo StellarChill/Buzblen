@@ -7,7 +7,7 @@ function Homepage() {
   <Navbar/>
   <br />
   <PostForm/>
-  <Footer/>
+  
  
   <br />
   <br />
