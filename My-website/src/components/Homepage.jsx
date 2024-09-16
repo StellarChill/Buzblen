@@ -8,11 +8,7 @@ function Homepage() {
   <Navbar/>
   <br />
   <PostForm/>
-<<<<<<< HEAD
  
-=======
-  
->>>>>>> 2298a9c5d5b92996dc933c73b48abb0f0dd33287
  
   <br />
   <br />
@@ -26,8 +22,7 @@ function Homepage() {
   <br />
   <br />
   <br />
-  <Footer/> 
-
+  <Footer/>
   </>
 }
 
