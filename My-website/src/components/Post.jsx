@@ -141,7 +141,7 @@ function PostForm() {
         {posts.map((post) => (
           <div key={post.id} className="mb-6 p-4 bg-gray-100 rounded-lg shadow">
             <div className="flex items-center mb-4">
-              <div className="avatar">
+              <div className="avatar ">
                 <div className="ring-primary ring-offset-base-100 w-10 mr-2 ml-2 rounded-full ring ring-offset-2">
                   <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
                 </div>
@@ -247,9 +247,9 @@ function PostForm() {
             </div>
 
             {showComments[post.id] && (
-              <div className="mb-4">
-                <div className="flex items-center mb-2">
-                  <div className="avatar">
+              <div className="mb-4 ">
+                <div className="flex items-center mt-4 mb-2 ">
+                  <div className="avatar mr-2">
                     <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
                       <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
                     </div>
@@ -263,14 +263,14 @@ function PostForm() {
                   />
                   <button
                     onClick={() => handleAddComment(post.id)}
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                    className="text-white bg-blue-700 hover:bg-blue-800 mr-1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
                   >
                     Send
                   </button>
                 </div>
                 {post.comments.map((comment, index) => (
                   <div key={index} className="flex items-center mb-2">
-                    <div className="avatar">
+                    <div className="avatar mr-2">
                       <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
                         <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
                       </div>
