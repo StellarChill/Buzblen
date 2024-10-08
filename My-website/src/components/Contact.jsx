@@ -1,7 +1,18 @@
 import React from 'react'
 import Navbar from './Navbar'
+import backgroundImage from '../Picture/little-house.gif';
 function Contact() {
-  return <> 
+  const divStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',  // Fixes the background so it doesn't move on scroll
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',           // Centers the content horizontally
+  };
+  return <div style={divStyle}>
    <Navbar/>
    <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4" >Let Get To Know About Us :v </h1>
@@ -85,7 +96,7 @@ function Contact() {
     </div>
  
   
-  </>
+  </div>
 }
 
 export default Contact 

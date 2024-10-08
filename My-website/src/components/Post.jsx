@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faImage } from '@fortawesome/free-solid-svg-icons';
 
 function PostForm() {
   const [text, setText] = useState('');
   const [images, setImages] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [showComments, setShowComments] = useState({});
+  const [commentInput, setCommentInput] = useState({});
+  const fileInputRef = useRef(null);
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -38,10 +42,17 @@ function PostForm() {
     ));
   };
 
-  const handleAddComment = (postId, commentText) => {
-    setPosts(posts.map(post => 
-      post.id === postId ? { ...post, comments: [...post.comments, commentText] } : post
-    ));
+  const handleAddComment = (postId) => {
+    if (commentInput[postId]?.trim()) {
+      setPosts(posts.map(post => 
+        post.id === postId ? { ...post, comments: [...post.comments, commentInput[postId]] } : post
+      ));
+      setCommentInput({ ...commentInput, [postId]: '' });
+    }
+  };
+
+  const handleCommentInputChange = (e, postId) => {
+    setCommentInput({ ...commentInput, [postId]: e.target.value });
   };
 
   const handleDelete = (postId) => {
@@ -68,6 +79,17 @@ function PostForm() {
     }));
   };
 
+  const handleToggleComments = (postId) => {
+    setShowComments({
+      ...showComments,
+      [postId]: !showComments[postId],
+    });
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <div className="max-w-lg mx-auto p-5 bg-white shadow-md rounded-lg">
       <form onSubmit={handleSubmit}>
@@ -89,11 +111,19 @@ function PostForm() {
           <label htmlFor="post-images" className="block mb-2 text-sm font-medium text-gray-900">
             Upload Images
           </label>
+          <button
+            type="button"
+            onClick={handleButtonClick}
+            className="flex items-center text-gray-900 bg-gray-50 border border-gray-300 rounded-lg p-2 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={faImage} className="mr-2" />
+            Choose Images
+          </button>
           <input
             type="file"
-            id="post-images"
+            ref={fileInputRef}
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="hidden"
             accept="image/*"
             multiple
           />
@@ -110,7 +140,15 @@ function PostForm() {
       <div className="mt-8">
         {posts.map((post) => (
           <div key={post.id} className="mb-6 p-4 bg-gray-100 rounded-lg shadow">
-            <p className="text-gray-900 mb-4">{post.text}</p>
+            <div className="flex items-center mb-4">
+              <div className="avatar ">
+                <div className="ring-primary ring-offset-base-100 w-10 mr-2 ml-2 rounded-full ring ring-offset-2">
+                  <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                </div>
+              </div>
+              <p className="text-gray-900 bold ml-2">My name</p>
+            </div>
+
             {post.images && post.images.length > 0 && (
               <div className="relative w-full">
                 {/* Carousel wrapper */}
@@ -126,9 +164,13 @@ function PostForm() {
                         alt={`Post Image ${index}`}
                       />
                     </div>
+                    
                   ))}
                 </div>
+                <p className="text-gray-900 bold mt-4">{post.text}</p>
+
                 <div className="flex justify-center items-center pt-4">
+                  
                   <button
                     type="button"
                     className="flex justify-center items-center me-4 h-full cursor-pointer group focus:outline-none"
@@ -184,35 +226,60 @@ function PostForm() {
             <div className="flex items-center mb-4">
               <button
                 onClick={() => handleLike(post.id)}
-                className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 mr-2"
+                className={`text-white mt-3 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 mr-2 ${post.likes > 0 ? 'bg-blue-500' : 'bg-blue-500'}`}
+                disabled={post.likes > 0}
               >
-                <FontAwesomeIcon icon={faHeart} className="mr-2" />
+                <FontAwesomeIcon icon={faHeart} className={`mr-2 ${post.likes > 0 ? 'text-red-500' : 'text-blue-500'}`} />
                 Like ({post.likes})
               </button>
               <button
                 onClick={() => handleDelete(post.id)}
-                className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2"
+                className="text-white bg-red-600 mt-3 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2"
               >
                 Delete
               </button>
+              <button
+                onClick={() => handleToggleComments(post.id)}
+                className="text-white ml-2 mt-3 bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2"
+              >
+                {showComments[post.id] ? 'Hide' : 'Show'} Comments
+              </button>
             </div>
 
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && e.target.value.trim()) {
-                    handleAddComment(post.id, e.target.value);
-                    e.target.value = '';
-                  }
-                }}
-                className="w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500 mb-2"
-              />
-              {post.comments.map((comment, index) => (
-                <p key={index} className="text-gray-700">{comment}</p>
-              ))}
-            </div>
+            {showComments[post.id] && (
+              <div className="mb-4 ">
+                <div className="flex items-center mt-4 mb-2 ">
+                  <div className="avatar mr-2">
+                    <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
+                      <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={commentInput[post.id] || ''}
+                    onChange={(e) => handleCommentInputChange(e, post.id)}
+                    className="w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500 mr-2"
+                  />
+                  <button
+                    onClick={() => handleAddComment(post.id)}
+                    className="text-white bg-blue-700 hover:bg-blue-800 mr-1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                  >
+                    Send
+                  </button>
+                </div>
+                {post.comments.map((comment, index) => (
+                  <div key={index} className="flex items-center mb-2">
+                    <div className="avatar mr-2">
+                      <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
+                        <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                      </div>
+                    </div>
+                    <p className="text-gray-700">{comment}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
