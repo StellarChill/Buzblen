@@ -8,6 +8,7 @@ function PostForm() {
   const [posts, setPosts] = useState([]);
   const [showComments, setShowComments] = useState({});
   const [commentInput, setCommentInput] = useState({});
+  const [nestedCommentInput, setNestedCommentInput] = useState({});
   const fileInputRef = useRef(null);
 
   const handleTextChange = (e) => {
@@ -21,16 +22,15 @@ function PostForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const newPost = {
       id: Date.now(),
       text: text,
       images: images,
       likes: 0,
       comments: [],
-      currentImageIndex: 0, // Add index to manage carousel position
+      currentImageIndex: 0,
+      timestamp: new Date(), 
     };
-
     setPosts([newPost, ...posts]);
     setText('');
     setImages([]);
@@ -45,9 +45,27 @@ function PostForm() {
   const handleAddComment = (postId) => {
     if (commentInput[postId]?.trim()) {
       setPosts(posts.map(post => 
-        post.id === postId ? { ...post, comments: [...post.comments, commentInput[postId]] } : post
+        post.id === postId ? { ...post, comments: [...post.comments, { text: commentInput[postId], replies: [], timestamp: new Date() }] } : post
       ));
       setCommentInput({ ...commentInput, [postId]: '' });
+    }
+  };
+
+  const handleAddNestedComment = (postId, commentIndex) => {
+    const key = `${postId}-${commentIndex}`;
+    if (nestedCommentInput[key]?.trim()) {
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          const updatedComments = [...post.comments];
+          updatedComments[commentIndex].replies.push({
+            text: nestedCommentInput[key],
+            timestamp: new Date(),
+          });
+          return { ...post, comments: updatedComments };
+        }
+        return post;
+      }));
+      setNestedCommentInput({ ...nestedCommentInput, [key]: '' });
     }
   };
 
@@ -55,8 +73,16 @@ function PostForm() {
     setCommentInput({ ...commentInput, [postId]: e.target.value });
   };
 
+  const handleNestedCommentInputChange = (e, postId, commentIndex) => {
+    const key = `${postId}-${commentIndex}`;
+    setNestedCommentInput({ ...nestedCommentInput, [key]: e.target.value });
+  };
+
   const handleDelete = (postId) => {
-    setPosts(posts.filter(post => post.id !== postId));
+    const confirmDelete = window.confirm("Are you sure you want to delete?");
+    if (confirmDelete) {
+      setPosts(posts.filter(post => post.id !== postId));
+    }
   };
 
   const handlePrevImage = (postId) => {
@@ -94,9 +120,7 @@ function PostForm() {
     <div className="max-w-lg mx-auto p-5 bg-white shadow-md rounded-lg">
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="post-text" className="block mb-2 text-sm font-medium text-gray-900">
-            Your Post
-          </label>
+          <label htmlFor="post-text" className="block mb-2 text-sm font-medium text-gray-900">Your Post</label>
           <textarea
             id="post-text"
             value={text}
@@ -106,11 +130,8 @@ function PostForm() {
             required
           ></textarea>
         </div>
-
         <div className="mb-4">
-          <label htmlFor="post-images" className="block mb-2 text-sm font-medium text-gray-900">
-            Upload Images
-          </label>
+          <label htmlFor="post-images" className="block mb-2 text-sm font-medium text-gray-900">Upload Images</label>
           <button
             type="button"
             onClick={handleButtonClick}
@@ -128,7 +149,6 @@ function PostForm() {
             multiple
           />
         </div>
-
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -141,7 +161,7 @@ function PostForm() {
         {posts.map((post) => (
           <div key={post.id} className="mb-6 p-4 bg-gray-100 rounded-lg shadow">
             <div className="flex items-center mb-4">
-              <div className="avatar ">
+              <div className="avatar">
                 <div className="ring-primary ring-offset-base-100 w-10 mr-2 ml-2 rounded-full ring ring-offset-2">
                   <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
                 </div>
@@ -151,7 +171,6 @@ function PostForm() {
 
             {post.images && post.images.length > 0 && (
               <div className="relative w-full">
-                {/* Carousel wrapper */}
                 <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
                   {post.images.map((image, index) => (
                     <div
@@ -164,33 +183,19 @@ function PostForm() {
                         alt={`Post Image ${index}`}
                       />
                     </div>
-                    
                   ))}
                 </div>
                 <p className="text-gray-900 bold mt-4">{post.text}</p>
-
+                <p className="text-gray-500 text-sm">{new Date(post.timestamp).toLocaleString()}</p>
                 <div className="flex justify-center items-center pt-4">
-                  
                   <button
                     type="button"
                     className="flex justify-center items-center me-4 h-full cursor-pointer group focus:outline-none"
                     onClick={() => handlePrevImage(post.id)}
                   >
-                    <span className="text-gray-400 hover:text-gray-900 dark:hover:text-white group-focus:text-gray-900 dark:group-focus:text-white">
-                      <svg
-                        className="rtl:rotate-180 w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M13 5H1m0 0 4 4M1 5l4-4"
-                        />
+                    <span className="text-gray-400 hover:text-gray-900 group-focus:text-gray-900">
+                      <svg className="rtl:rotate-180 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
                       </svg>
                       <span className="sr-only">Previous</span>
                     </span>
@@ -200,21 +205,9 @@ function PostForm() {
                     className="flex justify-center items-center h-full cursor-pointer group focus:outline-none"
                     onClick={() => handleNextImage(post.id)}
                   >
-                    <span className="text-gray-400 hover:text-gray-900 dark:hover:text-white group-focus:text-gray-900 dark:group-focus:text-white">
-                      <svg
-                        className="rtl:rotate-180 w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M1 5h12m0 0L9 1m4 4L9 9"
-                        />
+                    <span className="text-gray-400 hover:text-gray-900 group-focus:text-gray-900">
+                      <svg className="rtl:rotate-180 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                       </svg>
                       <span className="sr-only">Next</span>
                     </span>
@@ -247,8 +240,8 @@ function PostForm() {
             </div>
 
             {showComments[post.id] && (
-              <div className="mb-4 ">
-                <div className="flex items-center mt-4 mb-2 ">
+              <div className="mb-4">
+                <div className="flex items-center mt-4 mb-2">
                   <div className="avatar mr-2">
                     <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
                       <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
@@ -263,19 +256,52 @@ function PostForm() {
                   />
                   <button
                     onClick={() => handleAddComment(post.id)}
-                    className="text-white bg-blue-700 hover:bg-blue-800 mr-1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
                   >
                     Send
                   </button>
                 </div>
-                {post.comments.map((comment, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <div className="avatar mr-2">
-                      <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
-                        <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                {post.comments.map((comment, commentIndex) => (
+                  <div key={commentIndex} className="ml-4 mb-2">
+                    <div className="flex items-center mb-2">
+                      <div className="avatar mr-2">
+                        <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
+                          <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                        </div>
                       </div>
+                      <p className="text-gray-700">{comment.text}</p>
+                      <span className="text-gray-500 text-sm ml-2">{new Date(comment.timestamp).toLocaleTimeString()}</span>
                     </div>
-                    <p className="text-gray-700">{comment}</p>
+                    <div className="flex items-center mb-2">
+                      <input
+                        type="text"
+                        placeholder="Reply..."
+                        value={nestedCommentInput[`${post.id}-${commentIndex}`] || ''}
+                        onChange={(e) => handleNestedCommentInputChange(e, post.id, commentIndex)}
+                        className="w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500 mr-2"
+                      />
+                      <button
+                        onClick={() => handleAddNestedComment(post.id, commentIndex)}
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                      >
+                        Reply
+                      </button>
+                    </div>
+                    {comment.replies.length > 0 && (
+                      <div className="ml-4">
+                        {comment.replies.map((reply, replyIndex) => (
+                          <div key={replyIndex} className="flex items-center mb-2">
+                            <div className="avatar mr-2">
+                              <div className="ring-primary ring-offset-base-100 w-8 mr-2 ml-2 rounded-full ring ring-offset-2">
+                                <img src="https://avatars.githubusercontent.com/u/143784469?v=4" alt="profile avatar" />
+                              </div>
+                            </div>
+                            <p className="text-gray-600">{reply.text}</p>
+                            <span className="text-gray-500 text-sm ml-2">{new Date(reply.timestamp).toLocaleTimeString()}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
