@@ -13,6 +13,10 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+<<<<<<< HEAD
+=======
+    "axios": "^1.7.7",
+>>>>>>> 97431922b94552dd97dace1704db7532dcbc377b
     "flowbite": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

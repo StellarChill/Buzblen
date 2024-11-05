@@ -33,10 +33,13 @@ function Navbar() {
               <Link to="/">Homepage</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/Profile">Profile</Link>
             </li>
             <li>
               <Link to="/register">Register</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
             </li>
             <li>
               <Link to="/contact">Contact</Link>
@@ -44,6 +47,9 @@ function Navbar() {
             <li>
               <Link to="/about">About</Link>
             </li>
+            <div>
+              <Link to="/admin"></Link>
+            </div>
           </ul>
         </div>
       </div>
