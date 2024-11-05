@@ -1,10 +1,22 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import backgroundImage from '../Picture/little-house.gif';
 
 const Login = () => {
+  const divStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',  
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',           
+  };
   return (
-    <>
+      <div  style={divStyle}>
+     
       <Navbar />
       <div className="container mx-auto p-4 md:p-6">
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
@@ -51,7 +63,7 @@ const Login = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
