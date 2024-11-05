@@ -1,10 +1,20 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-
+import backgroundImage from '../Picture/little-house.gif';
 const Register = () => {
+  const divStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',  // Fixes the background so it doesn't move on scroll
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',           // Centers the content horizontally
+  };
   return (
-    <>
+    <div style={divStyle}>
       <Navbar />
       <div className="container mx-auto p-4 md:p-6">
         <div style={{background:"#c6b790"}}className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
@@ -110,7 +120,7 @@ const Register = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
