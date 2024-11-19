@@ -1,16 +1,18 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const express = require('express');
+const router = express.Router();
 
-module.exports = {
-  getUsers: async (req, res) => {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  },
-  createUser: async (req, res) => {
-    const { name, email } = req.body;
-    const newUser = await prisma.user.create({
-      data: { name, email },
-    });
-    res.json(newUser);
-  },
-};
+let users = [
+  { id: 1, username: 'testuser', email: 'testuser@example.com' }
+];
+
+// Get user by ID
+router.get('/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
+
+module.exports = router;
