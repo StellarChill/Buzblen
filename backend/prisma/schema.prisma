@@ -1,0 +1,94 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+model Employee {
+  EmployeeID       Int     @id @default(autoincrement())
+  EmployeeType     Int
+  UserName         String
+  DateOfBirth      DateTime
+  Age              Int
+  Gender           String  @db.Char(1)
+  PhoneNumber      String  @db.VarChar(10)
+  Email            String  @unique
+  Password         String  @db.VarChar(50)
+  UserStatus       String  @db.VarChar(50)
+  Post             Post[]
+  Comment          Comment[]
+}
+
+model Post {
+  PostID           Int     @id @default(autoincrement())
+  EmployeeID       Int
+  PostDescription  String
+  PostStatus       String
+  DateCreated      DateTime
+  ImageURL         String
+  IsDeleted        Boolean
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  Comment          Comment[]
+}
+
+model Comment {
+  CommentID        Int     @id @default(autoincrement())
+  EmployeeID       Int
+  PostID           Int
+  CommentText      String
+  DateCommented    DateTime
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  Post             Post     @relation(fields: [PostID], references: [PostID])
+}
+
+model Like {
+  LikeID           Int     @id @default(autoincrement())
+  EmployeeID       Int
+  PostID           Int
+  DateLiked        DateTime
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  Post             Post     @relation(fields: [PostID], references: [PostID])
+}
+
+model Notification {
+  NotificationID   Int     @id @default(autoincrement())
+  EmployeeID       Int
+  NotificationType Int
+  PostID           Int?
+  DateNotified     DateTime
+  IsRead           Boolean
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  Post             Post?    @relation(fields: [PostID], references: [PostID])
+}
+
+model SearchHistory {
+  SearchID         Int     @id @default(autoincrement())
+  EmployeeID       Int
+  SearchQuery      String
+  SearchDateTime   DateTime
+  IsDeleted        Boolean
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+}
+
+model Feedback {
+  FeedbackID       Int     @id @default(autoincrement())
+  EmployeeID       Int
+  DevID            Int
+  FeedbackText     String
+  DateSubmitted    DateTime
+  DevResponse      String
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+}
+
+model DevDetails {
+  DevID            Int     @id @default(autoincrement())
+  EmployeeID       Int
+  DateOfBlock      DateTime
+  ReasonOfBlock    String
+  DateOfDelete     DateTime
+  ReasonOfDelete   String
+  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+}
+

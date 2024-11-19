@@ -4,12 +4,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server"
+    "start": "nodemon server",
+      "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
@@ -17,8 +18,12 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "mssql": "^11.0.1",
-    "mysql2": "^3.11.4",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "pg": "^8.13.1"
+  },
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "prisma": "^5.22.0"
   }
 }
