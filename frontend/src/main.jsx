@@ -9,6 +9,7 @@ import Homepage from './components/Homepage.jsx';
 import Register from './components/Register.jsx';
 import Profile from './components/Profile.jsx';
 import Addmin from './components/Addmin.jsx';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import {
   createBrowserRouter,
@@ -17,32 +18,48 @@ import {
 
 const router = createBrowserRouter([
   {
-      path: "/",
-    element: <Homepage />,
-    },
-    {
-      path: "/about",
-    element: <About />,
-    },
-    {
-      path: "/login",
-    element: <Login />,
-    },
-    {
-      path: "/contact",
-    element: <Contact />,
-    },
-    {
-      path: "/register",
-    element: <Register />,
-    },
-    {
-      path: "/profile",
-    element: <Profile />,
+    path: "/",
+    element: <Login />, // Default page is Login
   },
-    {
-      path: "/addmin",
-    element: <Addmin />,
+  {
+    path: "/about",
+    element: <About />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/addmin",
+    element: (
+      <ProtectedRoute>
+        <Addmin />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/homepage",
+    element: (
+      <ProtectedRoute>
+        <Homepage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "*",
+    element: <h1>404 - Page Not Found</h1>,
   },
 ]);
 

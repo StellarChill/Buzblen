@@ -7,15 +7,14 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model EmployeeDetails {
-  EmployeeID      String            @id @default(uuid()) @db.Uuid
-  EmployeeType    String            @unique
+  EmployeeID      String   @id @default(uuid()) @db.Uuid
+  EmployeeType    String
   UserName        String
   DateOfBirth     DateTime
   Age             Int
   Gender          String
-  PhoneNumber     Int
+  PhoneNumber     String
   Email           String
   Password        String
   UserStatus      String
@@ -23,98 +22,96 @@ model EmployeeDetails {
   // Relations
   Comments        CommentDetails[]
   DevDetails      DevDetails[]
-  // Feedbacks       FeedbackDetails[]
+  Feedbacks       FeedbackDetails[]
   Likes           LikeDetails[]
-  // Notifications   NotificationDetails[]
+  Notifications   NotificationDetails[]
   Posts           PostDetails[]
-  // Searches        SearchHistory[]
+  Searches        SearchHistory[]
 }
 
 model PostDetails {
-  PostID         String   @id @default(uuid()) @db.Uuid
-  EmployeeID     String  @db.Uuid
+  PostID          String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
   PostDescription String
-  PostStatus     String
-  DateCreated    DateTime
-  ImageURL       String
-  IsDeleted      String
+  PostStatus      String
+  DateCreated     DateTime
+  ImageURL        String
+  IsDeleted       String
 
   // Relations
-  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-  Comments       CommentDetails[]
-  Likes          LikeDetails[]
-  // Notifications  NotificationDetails[]
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+  Comments        CommentDetails[]
+  Likes           LikeDetails[]
+  Notifications   NotificationDetails[]
 }
 
 model CommentDetails {
-  CommentID      String   @id @default(uuid()) @db.Uuid
-  EmployeeID     String  @db.Uuid
-  PostID         String  @db.Uuid
-  CommentText    String
-  DataCommented  DateTime
+  CommentID       String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  PostID          String   @db.Uuid
+  CommentText     String
+  DataCommented   DateTime
 
   // Relations
-  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-  Post           PostDetails     @relation(fields: [PostID], references: [PostID])
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+  Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
 }
 
 model DevDetails {
-  DevID          String   @id @default(uuid()) @db.Uuid
-  EmployeeID     String  @db.Uuid
-  DateOfBlock    DateTime
-  ReasonOfBlock  String
-  DateOfDelete   DateTime
-  ReasonOfDelete String
+  DevID           String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  DateOfBlock     DateTime
+  ReasonOfBlock   String
+  DateOfDelete    DateTime
+  ReasonOfDelete  String
 
   // Relations
-  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
 }
-
 
 model LikeDetails {
-  LikeID         String   @id @default(uuid()) @db.Uuid
-  EmployeeID     String  @db.Uuid
-  PostID         String  @db.Uuid
-  DateLiked      DateTime
+  LikeID          String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  PostID          String   @db.Uuid
+  DateLiked       DateTime
 
   // Relations
-  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-  Post           PostDetails     @relation(fields: [PostID], references: [PostID])
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+  Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
 }
 
-// model NotificationDetails {
-//   NotificationID String   @id @default(uuid()) @db.Uuid
-//   EmployeeID     String   @unique
-//   NotificationType String
-//   PostID         String   @unique
-//   DateNotified   DateTime
-//   IsRead         String
+model FeedbackDetails {
+  FeedbackID      String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  DevID           String   @db.Uuid
+  FeedbackText    String
+  DateSubmitted   DateTime
+  DevResponse     String
 
-//   // Relations
-//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-//   Post           PostDetails     @relation(fields: [PostID], references: [PostID])
-// }
+  // Relations
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+}
 
-// model SearchHistory {
-//   SearchID       String   @id @default(uuid()) @db.Uuid
-//   EmployeeID     String   @unique
-//   SearchQuery    String
-//   SearchDateTime DateTime
-//   IsDeleted      String
+model NotificationDetails {
+  NotificationID  String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  NotificationType String
+  PostID          String   @db.Uuid
+  DateNotified    DateTime
+  IsRead          String
 
-//   // Relations
-//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-// }
+  // Relations
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+  Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
+}
 
-// model FeedbackDetails {
-//   FeedbackID     String   @id @default(uuid()) @db.Uuid
-//   EmployeeID     String   @unique
-//   DevID          String   @unique
-//   FeedbackText   String
-//   DateSubmitted  DateTime
-//   DevResponse    String
+model SearchHistory {
+  SearchID        String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  SearchQuery     String
+  SearchDateTime  DateTime
+  IsDeleted       String
 
-//   // Relations
-//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
-//   Developer      DevDetails      @relation(fields: [DevID], references: [DevID])
-// }
+  // Relations
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+}
