@@ -6,89 +6,115 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
-model Employee {
-  EmployeeID       Int     @id @default(autoincrement())
-  EmployeeType     Int
-  UserName         String
-  DateOfBirth      DateTime
-  Age              Int
-  Gender           String  @db.Char(1)
-  PhoneNumber      String  @db.VarChar(10)
-  Email            String  @unique
-  Password         String  @db.VarChar(50)
-  UserStatus       String  @db.VarChar(50)
-  Post             Post[]
-  Comment          Comment[]
+
+
+model EmployeeDetails {
+  EmployeeID      String            @id @default(uuid()) @db.Uuid
+  EmployeeType    String            @unique
+  UserName        String
+  DateOfBirth     DateTime
+  Age             Int
+  Gender          String
+  PhoneNumber     Int
+  Email           String
+  Password        String
+  UserStatus      String
+
+  // Relations
+  Comments        CommentDetails[]
+  DevDetails      DevDetails[]
+  // Feedbacks       FeedbackDetails[]
+  Likes           LikeDetails[]
+  // Notifications   NotificationDetails[]
+  Posts           PostDetails[]
+  // Searches        SearchHistory[]
 }
 
-model Post {
-  PostID           Int     @id @default(autoincrement())
-  EmployeeID       Int
-  PostDescription  String
-  PostStatus       String
-  DateCreated      DateTime
-  ImageURL         String
-  IsDeleted        Boolean
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  Comment          Comment[]
+model PostDetails {
+  PostID         String   @id @default(uuid()) @db.Uuid
+  EmployeeID     String  @db.Uuid
+  PostDescription String
+  PostStatus     String
+  DateCreated    DateTime
+  ImageURL       String
+  IsDeleted      String
+
+  // Relations
+  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+  Comments       CommentDetails[]
+  Likes          LikeDetails[]
+  // Notifications  NotificationDetails[]
 }
 
-model Comment {
-  CommentID        Int     @id @default(autoincrement())
-  EmployeeID       Int
-  PostID           Int
-  CommentText      String
-  DateCommented    DateTime
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  Post             Post     @relation(fields: [PostID], references: [PostID])
-}
+model CommentDetails {
+  CommentID      String   @id @default(uuid()) @db.Uuid
+  EmployeeID     String  @db.Uuid
+  PostID         String  @db.Uuid
+  CommentText    String
+  DataCommented  DateTime
 
-model Like {
-  LikeID           Int     @id @default(autoincrement())
-  EmployeeID       Int
-  PostID           Int
-  DateLiked        DateTime
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  Post             Post     @relation(fields: [PostID], references: [PostID])
-}
-
-model Notification {
-  NotificationID   Int     @id @default(autoincrement())
-  EmployeeID       Int
-  NotificationType Int
-  PostID           Int?
-  DateNotified     DateTime
-  IsRead           Boolean
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-  Post             Post?    @relation(fields: [PostID], references: [PostID])
-}
-
-model SearchHistory {
-  SearchID         Int     @id @default(autoincrement())
-  EmployeeID       Int
-  SearchQuery      String
-  SearchDateTime   DateTime
-  IsDeleted        Boolean
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
-}
-
-model Feedback {
-  FeedbackID       Int     @id @default(autoincrement())
-  EmployeeID       Int
-  DevID            Int
-  FeedbackText     String
-  DateSubmitted    DateTime
-  DevResponse      String
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  // Relations
+  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+  Post           PostDetails     @relation(fields: [PostID], references: [PostID])
 }
 
 model DevDetails {
-  DevID            Int     @id @default(autoincrement())
-  EmployeeID       Int
-  DateOfBlock      DateTime
-  ReasonOfBlock    String
-  DateOfDelete     DateTime
-  ReasonOfDelete   String
-  Employee         Employee @relation(fields: [EmployeeID], references: [EmployeeID])
+  DevID          String   @id @default(uuid()) @db.Uuid
+  EmployeeID     String  @db.Uuid
+  DateOfBlock    DateTime
+  ReasonOfBlock  String
+  DateOfDelete   DateTime
+  ReasonOfDelete String
+
+  // Relations
+  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
 }
 
+
+model LikeDetails {
+  LikeID         String   @id @default(uuid()) @db.Uuid
+  EmployeeID     String  @db.Uuid
+  PostID         String  @db.Uuid
+  DateLiked      DateTime
+
+  // Relations
+  Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+  Post           PostDetails     @relation(fields: [PostID], references: [PostID])
+}
+
+// model NotificationDetails {
+//   NotificationID String   @id @default(uuid()) @db.Uuid
+//   EmployeeID     String   @unique
+//   NotificationType String
+//   PostID         String   @unique
+//   DateNotified   DateTime
+//   IsRead         String
+
+//   // Relations
+//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+//   Post           PostDetails     @relation(fields: [PostID], references: [PostID])
+// }
+
+// model SearchHistory {
+//   SearchID       String   @id @default(uuid()) @db.Uuid
+//   EmployeeID     String   @unique
+//   SearchQuery    String
+//   SearchDateTime DateTime
+//   IsDeleted      String
+
+//   // Relations
+//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+// }
+
+// model FeedbackDetails {
+//   FeedbackID     String   @id @default(uuid()) @db.Uuid
+//   EmployeeID     String   @unique
+//   DevID          String   @unique
+//   FeedbackText   String
+//   DateSubmitted  DateTime
+//   DevResponse    String
+
+//   // Relations
+//   Employee       EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID])
+//   Developer      DevDetails      @relation(fields: [DevID], references: [DevID])
+// }
