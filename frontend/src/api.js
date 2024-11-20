@@ -9,9 +9,9 @@ const API = axios.create({
 export const registerUser = (data) => API.post('/auth/register', data);
 export const loginUser = (data) => API.post('/auth/login', data);
 
-// Feedback APIs
-// export const getFeedbacks = () => API.get('/feedback');
-// export const createFeedback = (data) => API.post('/feedback', data);
+Feedback APIs
+export const getFeedbacks = () => API.get('/feedback');
+export const createFeedback = (data) => API.post('/feedback', data);
 
 // Comment APIs
 export const getComments = () => API.get('/comment');

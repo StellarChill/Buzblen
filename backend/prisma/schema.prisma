@@ -9,24 +9,17 @@ generator client {
 
 model EmployeeDetails {
   EmployeeID      String   @id @default(uuid()) @db.Uuid
-  EmployeeType    String
-  UserName        String
-  DateOfBirth     DateTime
-  Age             Int
-  Gender          String
-  PhoneNumber     String
-  Email           String
-  Password        String
-  UserStatus      String
+  UserName        String   @unique @db.VarChar(50) // ใช้ @unique เพื่อป้องกันชื่อซ้ำ
+  Password        String   @db.VarChar(255) // รหัสผ่านเข้ารหัส
 
   // Relations
+  Posts           PostDetails[]
   Comments        CommentDetails[]
-  DevDetails      DevDetails[]
-  Feedbacks       FeedbackDetails[]
   Likes           LikeDetails[]
   Notifications   NotificationDetails[]
-  Posts           PostDetails[]
   Searches        SearchHistory[]
+  DevDetails      DevDetails[]
+  Feedbacks       FeedbackDetails[]
 }
 
 model PostDetails {
@@ -34,11 +27,10 @@ model PostDetails {
   EmployeeID      String   @db.Uuid
   PostDescription String
   PostStatus      String
-  DateCreated     DateTime
+  DateCreated     DateTime @default(now())
   ImageURL        String
-  IsDeleted       String
+  IsDeleted       Boolean  @default(false)
 
-  // Relations
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Comments        CommentDetails[]
   Likes           LikeDetails[]
@@ -50,46 +42,20 @@ model CommentDetails {
   EmployeeID      String   @db.Uuid
   PostID          String   @db.Uuid
   CommentText     String
-  DataCommented   DateTime
+  DateCommented   DateTime @default(now())
 
-  // Relations
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
-}
-
-model DevDetails {
-  DevID           String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  DateOfBlock     DateTime
-  ReasonOfBlock   String
-  DateOfDelete    DateTime
-  ReasonOfDelete  String
-
-  // Relations
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
 }
 
 model LikeDetails {
   LikeID          String   @id @default(uuid()) @db.Uuid
   EmployeeID      String   @db.Uuid
   PostID          String   @db.Uuid
-  DateLiked       DateTime
+  DateLiked       DateTime @default(now())
 
-  // Relations
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
-}
-
-model FeedbackDetails {
-  FeedbackID      String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  DevID           String   @db.Uuid
-  FeedbackText    String
-  DateSubmitted   DateTime
-  DevResponse     String
-
-  // Relations
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
 }
 
 model NotificationDetails {
@@ -97,10 +63,9 @@ model NotificationDetails {
   EmployeeID      String   @db.Uuid
   NotificationType String
   PostID          String   @db.Uuid
-  DateNotified    DateTime
-  IsRead          String
+  DateNotified    DateTime @default(now())
+  IsRead          Boolean  @default(false)
 
-  // Relations
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
 }
@@ -109,9 +74,30 @@ model SearchHistory {
   SearchID        String   @id @default(uuid()) @db.Uuid
   EmployeeID      String   @db.Uuid
   SearchQuery     String
-  SearchDateTime  DateTime
-  IsDeleted       String
+  SearchDateTime  DateTime @default(now())
+  IsDeleted       Boolean  @default(false)
 
-  // Relations
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+}
+
+model DevDetails {
+  DevID           String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  DateOfBlock     DateTime
+  ReasonOfBlock   String
+  DateOfDelete    DateTime?
+  ReasonOfDelete  String?
+
+  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
+}
+
+model FeedbackDetails {
+  FeedbackID      String   @id @default(uuid()) @db.Uuid
+  EmployeeID      String   @db.Uuid
+  DevID           String   @db.Uuid
+  FeedbackText    String
+  DateSubmitted   DateTime @default(now())
+  DevResponse     String?
+
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
 }
