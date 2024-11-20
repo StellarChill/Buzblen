@@ -8,8 +8,9 @@ const API = axios.create({
 // Authentication APIs
 export const registerUser = (data) => API.post('/auth/register', data);
 export const loginUser = (data) => API.post('/auth/login', data);
+export const logoutUser = (data) => API.post('/auth/logout',data); 
 
-Feedback APIs
+// Feedback APIs
 export const getFeedbacks = () => API.get('/feedback');
 export const createFeedback = (data) => API.post('/feedback', data);
 

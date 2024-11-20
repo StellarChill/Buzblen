@@ -3,10 +3,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient(); // สร้าง Prisma Client
+const prisma = new PrismaClient();
 const router = express.Router();
 
-// Register
+// Register Endpoint
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -20,9 +20,7 @@ router.post('/register', async (req, res) => {
 
     try {
         const existingUser = await prisma.employeeDetails.findUnique({
-            where: {
-                UserName: username,
-            },
+            where: { UserName: username },
         });
 
         if (existingUser) {
@@ -40,11 +38,12 @@ router.post('/register', async (req, res) => {
 
         res.status(201).json({ message: 'Registration successful', user });
     } catch (error) {
+        console.error('Registration error:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
 
-// Login
+// Login Endpoint
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -54,9 +53,7 @@ router.post('/login', async (req, res) => {
 
     try {
         const user = await prisma.employeeDetails.findUnique({
-            where: {
-                UserName: username,
-            },
+            where: { UserName: username },
         });
 
         if (!user) {
@@ -71,13 +68,28 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign(
             { id: user.EmployeeID, username: user.UserName },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '1h' } // Token มีอายุ 1 ชั่วโมง
         );
 
-        res.json({ message: 'Login successful', token });
+        // เก็บ Token ลงใน HTTP-Only Cookie
+        res.cookie('jwt', token, {
+            httpOnly: true, // ป้องกันการเข้าถึงจาก JavaScript
+            secure: process.env.NODE_ENV === 'production', // ใช้ secure เมื่อเป็น production
+            maxAge: 3600000, // อายุของ Cookie (1 ชั่วโมง)
+        });
+
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
+        console.error('Login error:', error.message);
         res.status(500).json({ error: error.message });
     }
+});
+
+// Logout Endpoint
+router.post('/logout', (req, res) => {
+    // ลบ Cookie โดยตั้ง maxAge เป็น 0
+    res.cookie('jwt', '', { maxAge: 0 });
+    res.status(200).json({ message: 'Logout successful' });
 });
 
 module.exports = router;
