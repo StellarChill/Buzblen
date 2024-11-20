@@ -1,13 +1,33 @@
 import React from "react";
 import Navbar from "./Navbar";
+import PostForm from "./Post";
 import Footer from "./Footer";
+import backgroundImage from '../Picture/little-house.gif'; // Ensure this path is correct
 
 function Homepage() {
+  const divStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',  // Fixes the background so it doesn't move on scroll
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',           // Centers the content horizontally
+  };
+
+  const contentStyle = {
+    maxWidth: '800px',              // Limits the width of the content
+    width: '100%',                  // Makes sure it doesn’t exceed 100% of the parent
+    padding: '20px',                // Adds padding to prevent content from touching the sides
+    boxSizing: 'border-box',        // Ensures padding is included in the width
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div style={divStyle}>
       <Navbar />
-      <div className="flex-1 container mx-auto p-4">
-        <h1 className="text-xl font-bold">Welcome to the Homepage</h1>
+      <div style={contentStyle}>
+        <PostForm />
       </div>
       <Footer />
     </div>

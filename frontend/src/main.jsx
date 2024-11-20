@@ -22,6 +22,10 @@ const router = createBrowserRouter([
     element: <Login />, // Default page is Login
   },
   {
+    path: "/login",
+    element: <Login />, // Default page is Login
+  },
+  {
     path: "/about",
     element: <About />,
   },
@@ -35,27 +39,25 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: (
-      <ProtectedRoute>
+    element: 
         <Profile />
-      </ProtectedRoute>
-    ),
   },
   {
     path: "/addmin",
-    element: (
-      <ProtectedRoute>
+    element: 
         <Addmin />
-      </ProtectedRoute>
-    ),
   },
   {
     path: "/homepage",
-    element: (
-      <ProtectedRoute>
+    element: 
         <Homepage />
-      </ProtectedRoute>
-    ),
+  
+  },
+  {
+    path: "/",
+    element: 
+        <Homepage />
+  
   },
   {
     path: "*",
