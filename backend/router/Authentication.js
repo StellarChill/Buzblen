@@ -8,10 +8,10 @@ const router = express.Router();
 
 // Register Endpoint
 router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Username and Password are required' });
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and Password are required' });
     }
 
     if (password.length < 6) {
@@ -20,18 +20,18 @@ router.post('/register', async (req, res) => {
 
     try {
         const existingUser = await prisma.employeeDetails.findUnique({
-            where: { UserName: username },
+            where: { Email: email },
         });
 
         if (existingUser) {
-            return res.status(400).json({ message: 'Username already exists' });
+            return res.status(400).json({ message: 'Email already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await prisma.employeeDetails.create({
             data: {
-                UserName: username,
+                Email: email,
                 Password: hashedPassword,
             },
         });
@@ -45,15 +45,15 @@ router.post('/register', async (req, res) => {
 
 // Login Endpoint
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Username and Password are required' });
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and Password are required' });
     }
 
     try {
         const user = await prisma.employeeDetails.findUnique({
-            where: { UserName: username },
+            where: { Email: email },
         });
 
         if (!user) {
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: user.EmployeeID, username: user.UserName },
+            { id: user.EmployeeID, email: user.Email },
             process.env.JWT_SECRET,
             { expiresIn: '1h' } // Token มีอายุ 1 ชั่วโมง
         );

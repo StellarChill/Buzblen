@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "EmployeeDetails" (
     "EmployeeID" UUID NOT NULL,
-    "UserName" VARCHAR(50) NOT NULL,
+    "Email" VARCHAR(100) NOT NULL,
     "Password" VARCHAR(255) NOT NULL,
 
     CONSTRAINT "EmployeeDetails_pkey" PRIMARY KEY ("EmployeeID")
@@ -89,7 +89,7 @@ CREATE TABLE "FeedbackDetails" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "EmployeeDetails_UserName_key" ON "EmployeeDetails"("UserName");
+CREATE UNIQUE INDEX "EmployeeDetails_Email_key" ON "EmployeeDetails"("Email");
 
 -- AddForeignKey
 ALTER TABLE "PostDetails" ADD CONSTRAINT "PostDetails_EmployeeID_fkey" FOREIGN KEY ("EmployeeID") REFERENCES "EmployeeDetails"("EmployeeID") ON DELETE CASCADE ON UPDATE CASCADE;
