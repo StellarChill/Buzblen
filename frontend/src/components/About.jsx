@@ -45,7 +45,7 @@ const About = () => {
           <h2 className="text-2xl font-semibold">Our Team</h2>
           <p>
             Meet the people behind Buzzblen.<br></br>
-            Mr. Chalermchai Harnkong<br></br>
+            Mr. Chalermchai Hankhong<br></br>
             Miss Mariya Wannarat<br></br>
             Miss Kritthiranan Supimon<br></br>
             Mr. Weerapat Songsuwan<br></br>

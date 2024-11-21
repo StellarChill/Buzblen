@@ -1,10 +1,17 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const cors = require('cors'); // เพิ่ม CORS
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 const router = express.Router();
+
+// เพิ่ม CORS เพื่ออนุญาตให้ Frontend เชื่อมต่อได้
+router.use(cors({
+    origin: 'http://localhost:3000', // URL ของ Frontend
+    credentials: true, // เปิดใช้งาน Cookies
+}));
 
 // Register Endpoint
 router.post('/register', async (req, res) => {
@@ -68,17 +75,16 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign(
             { id: user.EmployeeID, email: user.Email },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' } // Token มีอายุ 1 ชั่วโมง
+            { expiresIn: '1h' }
         );
 
-        // เก็บ Token ลงใน HTTP-Only Cookie
         res.cookie('jwt', token, {
-            httpOnly: true, // ป้องกันการเข้าถึงจาก JavaScript
-            secure: process.env.NODE_ENV === 'production', // ใช้ secure เมื่อเป็น production
-            maxAge: 3600000, // อายุของ Cookie (1 ชั่วโมง)
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000,
         });
 
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
         console.error('Login error:', error.message);
         res.status(500).json({ error: error.message });
@@ -87,7 +93,6 @@ router.post('/login', async (req, res) => {
 
 // Logout Endpoint
 router.post('/logout', (req, res) => {
-    // ลบ Cookie โดยตั้ง maxAge เป็น 0
     res.cookie('jwt', '', { maxAge: 0 });
     res.status(200).json({ message: 'Logout successful' });
 });

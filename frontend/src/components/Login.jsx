@@ -3,20 +3,19 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import backgroundImage from '../Picture/little-house.gif';
 
-const Login = () => {
+function Login() {
   const divStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundAttachment: 'fixed',  
+    backgroundAttachment: 'fixed',
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',           
+    alignItems: 'center',
   };
   return (
-      <div  style={divStyle}>
-     
+    <div style={divStyle}>
       <Navbar />
       <div className="container mx-auto p-4 md:p-6">
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
@@ -62,9 +61,17 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <Footer />
     </div>
   );
-};
+}
 
 export default Login;
+
