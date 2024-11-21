@@ -1,3 +1,34 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+import React from 'react'
+import Navbar from './Navbar'
+import PostForm from './Post'
+import Footer from './Footer'
+
+function Homepage() {
+  return <>
+  <Navbar/>
+  <br />
+  <PostForm/>
+  
+ 
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <Footer/>
+  </>
+=======
+>>>>>>> 8abff612bc89d4e83970be193a1499ce0d2032af
 import React from "react";
 import Navbar from "./Navbar";
 import PostForm from "./Post";
@@ -47,7 +78,11 @@ function Homepage() {
       <Footer />
     </div>
   );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 97431922b94552dd97dace1704db7532dcbc377b
+>>>>>>> 8abff612bc89d4e83970be193a1499ce0d2032af
 }
 
 export default Homepage;

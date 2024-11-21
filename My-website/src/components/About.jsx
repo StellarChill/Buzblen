@@ -4,7 +4,7 @@ import backgroundImage from "../Picture/little-house.gif";
 const About = () => {
   const divStyle = {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "cover",
+    backgroundSize: "cover",   
     backgroundPosition: "center",
     backgroundAttachment: "fixed", // Fixes the background so it doesn't move on scroll
     minHeight: "100vh",
