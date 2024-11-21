@@ -7,8 +7,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:5000', // ชี้ไปยัง Backend
-        changeOrigin: true,
-        secure: false,
+        changeOrigin: true, // เปลี่ยน Origin ของคำขอให้ตรงกับ Backend
+        secure: false, // ปิดการตรวจสอบใบรับรอง SSL หากใช้งานใน Local
       },
     },
   },
