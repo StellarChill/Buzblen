@@ -57,7 +57,7 @@ function ChangeProfile() {
   return (
     <div style={divStyle}>
       <Navbar profileImage={profile.image} />
-      <PostForm ProfileName={profile.name} profileImage={profile.image} />
+      <PostForm />
       <div className="container" style={{ margin: '20px auto', maxWidth: '600px', width: '100%' }}>
         <h1 className="title">Profile</h1>
         <div className="profile-container">

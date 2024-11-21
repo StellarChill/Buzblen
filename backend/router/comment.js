@@ -1,28 +1,35 @@
 const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+const { checkBlacklist } = require('../middleware/authMiddleware');
+
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
+const prisma = new PrismaClient();
 
-let comments = [];
+// API สำหรับสร้างคอมเมนต์
+router.post('/', checkBlacklist, async (req, res) => {
+    const { employeeId, postId, commentText } = req.body;
 
-// Get comments by post
-router.get('/:postId', (req, res) => {
-    const postId = req.params.postId;
-    const filteredComments = comments.filter(c => c.postId === postId);
-    res.json(filteredComments);
-});
+    if (!employeeId || !postId || !commentText) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
 
-// Add comment
-router.post('/', (req, res) => {
-    const { postId, employeeId, text } = req.body;
-    const newComment = {
-        commentId: uuidv4(),
-        postId,
-        employeeId,
-        text,
-        dateCommented: new Date()
-    };
-    comments.push(newComment);
-    res.json({ message: 'Comment added successfully', comment: newComment });
+    try {
+        const newComment = await prisma.commentDetails.create({
+            data: {
+                EmployeeID: employeeId,
+                PostID: postId,
+                CommentText: commentText,
+            },
+        });
+
+        res.status(201).json({
+            message: 'Comment added successfully',
+            comment: newComment,
+        });
+    } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({ error: 'Error creating comment' });
+    }
 });
 
 module.exports = router;
