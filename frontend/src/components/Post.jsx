@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 
 function PostForm() {
   const [text, setText] = useState('');
+  const [image, setImage] = useState(null);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleTextChange = (e) => {
-    setText(e.target.value);
-  };
+  const handleTextChange = (e) => setText(e.target.value);
+  const handleImageChange = (e) => setImage(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+    const token = localStorage.getItem('token');
     if (!token) {
       setError('No token found. Please log in first.');
       setLoading(false);
@@ -24,12 +24,13 @@ function PostForm() {
 
     const formData = new FormData();
     formData.append('postDescription', text);
+    if (image) formData.append('image', image);
 
     try {
       const response = await fetch('http://localhost:5000/api/posts', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`, // Include token in Authorization header
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
@@ -37,8 +38,9 @@ function PostForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setPosts((prevPosts) => [...prevPosts, text]); // Add new post to the list
-        setText(''); // Clear the text input
+        setPosts((prevPosts) => [...prevPosts, data.post]);
+        setText('');
+        setImage(null);
       } else {
         setError(data.error || 'Error creating post.');
       }
@@ -49,21 +51,11 @@ function PostForm() {
     }
   };
 
-  const textWrapStyle = {
-    wordWrap: 'break-word', // Breaks words if they exceed the container width
-    overflowWrap: 'break-word', // Handles long text wrapping
-    maxWidth: '66ch', // Limit container to 66 characters wide
-    whiteSpace: 'pre-wrap', // Preserve line breaks and wrap text
-  };
-
   return (
     <div className="max-w-lg mx-auto p-5 bg-white shadow-md rounded-lg">
-      <form onSubmit={handleSubmit} method="post">
+      <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
         <div className="mb-4">
-          <label
-            htmlFor="post-text"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
+          <label htmlFor="post-text" className="block mb-2 text-sm font-medium text-gray-900">
             Your Post
           </label>
           <textarea
@@ -75,10 +67,20 @@ function PostForm() {
             required
           ></textarea>
         </div>
+        <div className="mb-4">
+          <label htmlFor="post-image" className="block mb-2 text-sm font-medium text-gray-900">
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="post-image"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            accept="image/*"
+          />
+        </div>
         {error && (
-          <p className="text-red-500 text-sm mb-4">
-            {error}
-          </p>
+          <p className="text-red-500 text-sm mb-4">{error}</p>
         )}
         <button
           type="submit"
@@ -99,10 +101,11 @@ function PostForm() {
               <li
                 key={index}
                 className="p-4 border border-gray-200 rounded-lg bg-gray-50"
-                style={textWrapStyle}
               >
-                <p className="text-sm font-semibold text-gray-800 mb-1">Your Post</p>
-                <p className="text-sm text-gray-700">{post}</p>
+                <p className="text-sm font-semibold text-gray-800 mb-1">{post.PostDescription}</p>
+                {post.ImageURL && (
+                  <img src={`http://localhost:5000${post.ImageURL}`} alt="Post" className="mt-2 max-w-full" />
+                )}
               </li>
             ))}
           </ul>
