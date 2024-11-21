@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import LikeButton from './likebutton';
+import CommentButton from './CommentButton';
 function PostForm() {
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
@@ -105,7 +106,11 @@ function PostForm() {
                 <p className="text-sm font-semibold text-gray-800 mb-1">{post.PostDescription}</p>
                 {post.ImageURL && (
                   <img src={`http://localhost:5000${post.ImageURL}`} alt="Post" className="mt-2 max-w-full" />
-                )}
+                
+                )}     <div className="flex items-center justify-start space-x-4 mt-2">
+                <LikeButton />
+                <CommentButton />
+              </div>
               </li>
             ))}
           </ul>
