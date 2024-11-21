@@ -16,10 +16,7 @@ model EmployeeDetails {
   Posts           PostDetails[]
   Comments        CommentDetails[]
   Likes           LikeDetails[]
-  Notifications   NotificationDetails[]
-  Searches        SearchHistory[]
   DevDetails      DevDetails[]
-  Feedbacks       FeedbackDetails[]
 }
 
 model PostDetails {
@@ -34,7 +31,6 @@ model PostDetails {
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Comments        CommentDetails[]
   Likes           LikeDetails[]
-  Notifications   NotificationDetails[]
 }
 
 model CommentDetails {
@@ -58,27 +54,9 @@ model LikeDetails {
   Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
 }
 
-model NotificationDetails {
-  NotificationID  String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  NotificationType String
-  PostID          String   @db.Uuid
-  DateNotified    DateTime @default(now())
-  IsRead          Boolean  @default(false)
 
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
-  Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
-}
 
-model SearchHistory {
-  SearchID        String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  SearchQuery     String
-  SearchDateTime  DateTime @default(now())
-  IsDeleted       Boolean  @default(false)
 
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
-}
 
 model DevDetails {
   DevID           String   @id @default(uuid()) @db.Uuid
@@ -91,13 +69,3 @@ model DevDetails {
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
 }
 
-model FeedbackDetails {
-  FeedbackID      String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  DevID           String   @db.Uuid
-  FeedbackText    String
-  DateSubmitted   DateTime @default(now())
-  DevResponse     String?
-
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
-}

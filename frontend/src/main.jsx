@@ -9,7 +9,6 @@ import Homepage from './components/Homepage.jsx';
 import Register from './components/Register.jsx';
 import Profile from './components/Profile.jsx';
 import Addmin from './components/Addmin.jsx';
-import ProtectedRoute from './components/ProtectedRoute';
 
 import {
   createBrowserRouter,
