@@ -41,6 +41,8 @@ function PostForm() {
     }
   };
 
+  
+
   return (
     <div className="max-w-lg mx-auto p-5 bg-white shadow-md rounded-lg">
       <form onSubmit={handleSubmit} method='post'>
