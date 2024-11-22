@@ -1,16 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function LikeButton() {
+function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  const handleLike = () => {
-    if (liked) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/posts/${postId}/likes`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLikeCount(data.likes.length);
+        setLiked(data.likes.some((like) => like.EmployeeID === localStorage.getItem('userId')));
+      } catch (error) {
+        console.error('Error fetching likes:', error);
+      }
+    };
+
+    fetchLikes();
+  }, [postId]);
+
+  const handleLike = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please log in to like posts');
+      return;
     }
-    setLiked(!liked);
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setLiked(!liked);
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+    } catch (error) {
+      console.error('Error handling like:', error);
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import LikeButton from './likebutton';
-import CommentButton from './CommentButton';
+import CommentButton from './CommentButton'; // Ensure correct path
+import LikeButton from './LikeButton'; // Ensure case sensitivity is correct
+
 function PostForm() {
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
@@ -80,9 +81,7 @@ function PostForm() {
             accept="image/*"
           />
         </div>
-        {error && (
-          <p className="text-red-500 text-sm mb-4">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <button
           type="submit"
           className={`w-full text-white ${
@@ -105,12 +104,16 @@ function PostForm() {
               >
                 <p className="text-sm font-semibold text-gray-800 mb-1">{post.PostDescription}</p>
                 {post.ImageURL && (
-                  <img src={`http://localhost:5000${post.ImageURL}`} alt="Post" className="mt-2 max-w-full" />
-                
-                )}     <div className="flex items-center justify-start space-x-4 mt-2">
-                <LikeButton />
-                <CommentButton />
-              </div>
+                  <img
+                    src={`http://localhost:5000${post.ImageURL}`}
+                    alt="Post"
+                    className="mt-2 max-w-full"
+                  />
+                )}
+                <div className="flex items-center justify-start space-x-4 mt-2">
+                  <LikeButton postId={post.PostID} />
+                  <CommentButton postId={post.PostID} />
+                </div>
               </li>
             ))}
           </ul>
