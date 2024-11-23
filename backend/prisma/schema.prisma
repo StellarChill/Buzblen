@@ -8,15 +8,14 @@ generator client {
 }
 
 model EmployeeDetails {
-  EmployeeID      String   @id @default(uuid()) @db.Uuid
-  Email           String   @unique @db.VarChar(100) // ใช้ @unique เพื่อป้องกัน Email ซ้ำ
-  Password        String   @db.VarChar(255) // รหัสผ่านเข้ารหัส
+  EmployeeID  String   @id @default(uuid()) @db.Uuid
+  Email       String   @unique @db.VarChar(100)
+  Password    String   @db.VarChar(255)
+  Role        String   @default("employee")
 
-  // Relations
-  Posts           PostDetails[]
-  Comments        CommentDetails[]
-  Likes           LikeDetails[]
-  DevDetails      DevDetails[]
+  Posts       PostDetails[]
+  Comments    CommentDetails[]
+  Likes       LikeDetails[]
 }
 
 model PostDetails {
@@ -53,19 +52,3 @@ model LikeDetails {
   Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
   Post            PostDetails     @relation(fields: [PostID], references: [PostID], onDelete: Cascade)
 }
-
-
-
-
-
-model DevDetails {
-  DevID           String   @id @default(uuid()) @db.Uuid
-  EmployeeID      String   @db.Uuid
-  DateOfBlock     DateTime
-  ReasonOfBlock   String
-  DateOfDelete    DateTime?
-  ReasonOfDelete  String?
-
-  Employee        EmployeeDetails @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: Cascade)
-}
-

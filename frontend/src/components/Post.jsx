@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import CommentButton from './CommentButton'; // Ensure correct path
-import LikeButton from './LikeButton'; // Ensure correct case sensitivity
+import CommentButton from './CommentButton';
+import LikeButton from './LikeButton';
+import DeleteButton from './DeleteButton';
 
 function PostForm() {
   const [text, setText] = useState('');
@@ -12,6 +13,7 @@ function PostForm() {
   const handleTextChange = (e) => setText(e.target.value);
   const handleImageChange = (e) => setImage(e.target.files[0]);
 
+  // ฟังก์ชันสำหรับสร้างโพสต์ใหม่
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -51,6 +53,11 @@ function PostForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ฟังก์ชันสำหรับจัดการโพสต์ที่ถูกลบ
+  const handlePostDeleted = (deletedPostId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.PostID !== deletedPostId));
   };
 
   return (
@@ -143,6 +150,14 @@ function PostForm() {
                   {/* Comment Button */}
                   <div className="flex-grow">
                     <CommentButton postId={post.PostID} />
+                  </div>
+
+                  {/* Delete Button */}
+                  <div className="flex-grow">
+                    <DeleteButton
+                      postId={post.PostID}
+                      onPostDeleted={handlePostDeleted}
+                    />
                   </div>
                 </div>
               </li>

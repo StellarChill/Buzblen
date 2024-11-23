@@ -1,7 +1,8 @@
 const express = require('express');
 const multer = require('multer');
+const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client');
-const { checkBlacklist } = require('../middleware/authMiddleware');
+const { checkBlacklist, verifyAdmin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -17,6 +18,25 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+// Middleware to ensure the user is updated to admin if credentials match
+const ensureAdminRole = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (email === 'admin@admin.com' && password === 'admin') {
+    const user = await prisma.employeeDetails.findUnique({
+      where: { Email: email },
+    });
+
+    if (user && user.Role !== 'admin') {
+      await prisma.employeeDetails.update({
+        where: { Email: email },
+        data: { Role: 'admin' },
+      });
+    }
+  }
+  next();
+};
 
 // Create a new post
 router.post('/', upload.single('image'), checkBlacklist, async (req, res) => {
@@ -132,6 +152,37 @@ router.get('/:postId/comments', async (req, res) => {
   } catch (error) {
     console.error('Error fetching comments:', error);
     res.status(500).json({ error: 'Error fetching comments' });
+  }
+});
+
+// Delete a Post (Owner or Admin Only)
+router.delete('/:id', checkBlacklist, async (req, res) => {
+  const postId = req.params.id;
+  const employeeId = req.user.id;
+
+  try {
+    const post = await prisma.postDetails.findUnique({
+      where: { PostID: postId },
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Check if the user is the owner or an admin
+    if (post.EmployeeID !== employeeId && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: You do not have permission to delete this post' });
+    }
+
+    await prisma.postDetails.update({
+      where: { PostID: postId },
+      data: { IsDeleted: true },
+    });
+
+    res.status(200).json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    res.status(500).json({ error: 'Error deleting post' });
   }
 });
 

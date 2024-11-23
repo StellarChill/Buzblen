@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import backgroundImage from '../Picture/little-house.gif';
 import { loginUser } from '../api';
@@ -7,7 +7,7 @@ import NavbarBL from './NavbarBeforeLogin';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -20,9 +20,17 @@ function Login() {
     e.preventDefault();
     try {
       const response = await loginUser(formData);
-      alert(response.data.message); // Notify user of successful login
+      alert(response.data.message);
       localStorage.setItem('token', response.data.token); // Store token
-      navigate('/homepage'); // Redirect to Homepage
+
+      // Decode token to check role (optional)
+      const userRole = JSON.parse(atob(response.data.token.split('.')[1])).role;
+
+      if (userRole === 'admin') {
+        navigate('/homepage'); // Redirect to admin page
+      } else {
+        navigate('/homepage'); // Redirect to homepage
+      }
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || 'Login failed');
@@ -79,18 +87,6 @@ function Login() {
                 required
               />
             </div>
-            <div className="flex items-start mb-6">
-              <div className="flex items-center h-5">
-                <input
-                  id="remember"
-                  type="checkbox"
-                  className="w-4 h-4 border border-gray-300 rounded bg-white focus:ring-3 focus:ring-blue-300"
-                />
-              </div>
-              <label htmlFor="remember" className="ms-2 text-sm font-medium text-black">
-                Remember me
-              </label>
-            </div>
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -106,10 +102,6 @@ function Login() {
           </p>
         </div>
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
       <Footer />
     </div>
   );

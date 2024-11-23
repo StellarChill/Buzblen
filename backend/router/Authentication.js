@@ -15,7 +15,7 @@ router.use(cors({
 
 // Register API
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and Password are required' });
@@ -37,7 +37,11 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await prisma.employeeDetails.create({
-      data: { Email: email, Password: hashedPassword },
+      data: { 
+        Email: email, 
+        Password: hashedPassword, 
+        Role: role || 'employee' // ตั้งค่า Role ค่าเริ่มต้นคือ 'employee'
+      },
     });
 
     res.status(201).json({ message: 'Registration successful' });
@@ -69,7 +73,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user.EmployeeID }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.EmployeeID, role: user.Role }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 

@@ -4,3 +4,7 @@
     
     
 }
+.bg-gold {
+    background-color: #FFD700; /* Gold color */
+    color: white; /* Text color for better readability */
+  }
