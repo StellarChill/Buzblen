@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CommentButton from './CommentButton'; // Ensure correct path
-import LikeButton from './LikeButton'; // Ensure case sensitivity is correct
+import LikeButton from './LikeButton'; // Ensure correct case sensitivity
 
 function PostForm() {
   const [text, setText] = useState('');
@@ -54,71 +54,106 @@ function PostForm() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-5 bg-white shadow-md rounded-lg">
-      <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
-        <div className="mb-4">
-          <label htmlFor="post-text" className="block mb-2 text-sm font-medium text-gray-900">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg space-y-6">
+      {/* Form Section */}
+      <form
+        onSubmit={handleSubmit}
+        method="post"
+        encType="multipart/form-data"
+        className="space-y-4"
+      >
+        <div>
+          <label
+            htmlFor="post-text"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             Your Post
           </label>
           <textarea
             id="post-text"
             value={text}
             onChange={handleTextChange}
-            className="w-full p-2.5 border border-gray-300 rounded-lg text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-4 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
             placeholder="What's on your mind?"
+            rows={4}
             required
           ></textarea>
         </div>
-        <div className="mb-4">
-          <label htmlFor="post-image" className="block mb-2 text-sm font-medium text-gray-900">
+        <div>
+          <label
+            htmlFor="post-image"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             Upload Image
           </label>
           <input
             type="file"
             id="post-image"
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
             accept="image/*"
           />
         </div>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm font-medium">{error}</p>
+        )}
         <button
           type="submit"
-          className={`w-full text-white ${
-            loading ? 'bg-blue-400' : 'bg-blue-700 hover:bg-blue-800'
-          } focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center`}
+          className={`w-full py-2 px-4 text-white text-lg font-medium rounded-lg ${
+            loading
+              ? 'bg-blue-400 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'
+          }`}
           disabled={loading}
         >
           {loading ? 'Posting...' : 'Post'}
         </button>
       </form>
 
-      {/* Display all submitted posts */}
-      {posts.length > 0 && (
-        <div className="mt-4">
-          <ul className="space-y-2">
+      {/* Posts Section */}
+      <div>
+        {posts.length > 0 ? (
+          <ul className="space-y-6">
             {posts.map((post, index) => (
               <li
                 key={index}
-                className="p-4 border border-gray-200 rounded-lg bg-gray-50"
+                className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200"
               >
-                <p className="text-sm font-semibold text-gray-800 mb-1">{post.PostDescription}</p>
+                {/* Post Description */}
+                <p className="text-lg font-semibold text-gray-800 mb-3">
+                  {post.PostDescription}
+                </p>
+
+                {/* Post Image */}
                 {post.ImageURL && (
                   <img
                     src={`http://localhost:5000${post.ImageURL}`}
                     alt="Post"
-                    className="mt-2 max-w-full"
+                    className="w-full h-auto rounded-lg mb-4 shadow-md"
                   />
                 )}
-                <div className="flex items-center justify-start space-x-4 mt-2">
-                  <LikeButton postId={post.PostID} />
-                  <CommentButton postId={post.PostID} />
+
+                {/* Buttons Section */}
+                <div className="flex items-center justify-between space-x-4 mt-4">
+                  {/* Like Button */}
+                  <div className="flex-shrink-0">
+                    <LikeButton postId={post.PostID} />
+                  </div>
+
+                  {/* Comment Button */}
+                  <div className="flex-grow">
+                    <CommentButton postId={post.PostID} />
+                  </div>
                 </div>
               </li>
             ))}
           </ul>
-        </div>
-      )}
+        ) : (
+          <p className="text-center text-gray-500">
+            No posts yet. Start sharing your thoughts!
+          </p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const { checkBlacklist } = require('../middleware/authMiddleware');
 
@@ -10,10 +9,10 @@ const prisma = new PrismaClient();
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public/postimages'); // Directory for images
+    cb(null, './public/postimages');
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`); // Unique file name
+    cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
 
@@ -60,16 +59,12 @@ router.post('/:id/like', checkBlacklist, async (req, res) => {
     });
 
     if (existingLike) {
-      // If already liked, unlike the post
       await prisma.likeDetails.delete({
-        where: {
-          LikeID: existingLike.LikeID,
-        },
+        where: { LikeID: existingLike.LikeID },
       });
       return res.status(200).json({ message: 'Post unliked' });
     }
 
-    // If not liked, create a like
     const newLike = await prisma.likeDetails.create({
       data: {
         EmployeeID: employeeId,
@@ -84,21 +79,59 @@ router.post('/:id/like', checkBlacklist, async (req, res) => {
   }
 });
 
-// Get likes for a post
-router.get('/:id/likes', async (req, res) => {
-  const postId = req.params.id;
+// Add Comment to a Post
+router.post('/:postId/comments', checkBlacklist, async (req, res) => {
+  const { postId } = req.params;
+  const { commentText } = req.body;
+  const employeeId = req.user.id;
+
+  if (!commentText) {
+    return res.status(400).json({ error: 'Comment text is required' });
+  }
 
   try {
-    const likes = await prisma.likeDetails.findMany({
-      where: {
+    const postExists = await prisma.postDetails.findFirst({
+      where: { PostID: postId, IsDeleted: false },
+    });
+
+    if (!postExists) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const newComment = await prisma.commentDetails.create({
+      data: {
+        EmployeeID: employeeId,
         PostID: postId,
+        CommentText: commentText,
+      },
+      include: {
+        Employee: { select: { Email: true } },
       },
     });
 
-    res.status(200).json({ likes });
+    res.status(201).json({ message: 'Comment added successfully', comment: newComment });
   } catch (error) {
-    console.error('Error fetching likes:', error);
-    res.status(500).json({ error: 'Error fetching likes' });
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Error adding comment' });
+  }
+});
+
+// Get All Comments for a Post
+router.get('/:postId/comments', async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const comments = await prisma.commentDetails.findMany({
+      where: { PostID: postId },
+      include: {
+        Employee: { select: { Email: true } },
+      },
+    });
+
+    res.status(200).json({ comments });
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Error fetching comments' });
   }
 });
 
