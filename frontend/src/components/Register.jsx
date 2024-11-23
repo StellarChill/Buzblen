@@ -1,9 +1,9 @@
-import React, { useState } from 'react'; // เพิ่ม useState สำหรับจัดการข้อมูลฟอร์ม
-import Navbar from './Navbar';
+import React, { useState } from 'react'; // Import useState for managing form data
+import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
 import Footer from './Footer';
 import backgroundImage from '../Picture/little-house.gif';
 import { registerUser } from '../api';
-
+import NavbarBL from './NavbarBeforeLogin';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +16,8 @@ const Register = () => {
     confirm_password: '',
   });
 
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -26,20 +28,21 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ตรวจสอบว่ารหัสผ่านตรงกัน
+    // Validate passwords match
     if (formData.password !== formData.confirm_password) {
       alert('Passwords do not match!');
       return;
     }
 
     try {
-      // ส่งข้อมูลไปยัง API
+      // Send data to API
       const response = await registerUser({
         email: formData.email,
         password: formData.password,
       });
 
-      alert(response.data.message); // แจ้งเตือนเมื่อสำเร็จ
+      alert(response.data.message); // Alert success message
+      navigate('/login'); // Redirect to the login page
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || 'Registration failed');
@@ -59,9 +62,13 @@ const Register = () => {
 
   return (
     <div style={divStyle}>
-      <Navbar />
+      <NavbarBL />
+      <br />
       <div className="container mx-auto p-4 md:p-6">
-        <div style={{ background: '#c6b790' }} className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
+        <div
+          style={{ background: '#ffffff' }}
+          className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6"
+        >
           <form onSubmit={handleSubmit}>
             {/* First Name */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
@@ -209,14 +216,29 @@ const Register = () => {
 
             <button
               type="submit"
-              style={{ background: '#8d6f22' }}
+              style={{ background: 'blue' }}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
               Submit
             </button>
           </form>
+
+          {/* Back to Login Link */}
+          <div className="mt-4 text-center">
+            <p className="text-sm text-black">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="text-blue-600 hover:underline"
+                style={{ fontSize: '13px' }}
+              >
+                Go back to Login
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
+      <br />
       <Footer />
     </div>
   );

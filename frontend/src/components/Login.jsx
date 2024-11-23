@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Footer from './Footer';
 import backgroundImage from '../Picture/little-house.gif';
 import { loginUser } from '../api';
-
-
+import NavbarBL from './NavbarBeforeLogin';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const handleChange = (e) => {
     setFormData({
@@ -20,8 +20,9 @@ function Login() {
     e.preventDefault();
     try {
       const response = await loginUser(formData);
-      alert(response.data.message); // แจ้งเตือนเมื่อเข้าสู่ระบบสำเร็จ
-      localStorage.setItem('token', response.data.token); // เก็บ Token
+      alert(response.data.message); // Notify user of successful login
+      localStorage.setItem('token', response.data.token); // Store token
+      navigate('/homepage'); // Redirect to Homepage
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || 'Login failed');
@@ -41,7 +42,12 @@ function Login() {
 
   return (
     <div style={divStyle}>
-      <Navbar />
+      <NavbarBL />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <div className="container mx-auto p-4 md:p-6">
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
           <form onSubmit={handleSubmit}>
@@ -92,8 +98,18 @@ function Login() {
               Login
             </button>
           </form>
+          <p className="mt-4 text-sm text-black">
+            Don't have an account?{' '}
+            <Link to="/register" className="text-blue-700 hover:underline">
+              Register
+            </Link>
+          </p>
         </div>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
       <Footer />
     </div>
   );

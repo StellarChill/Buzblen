@@ -7,8 +7,6 @@ import Contact from './components/Contact.jsx';
 import Login from './components/Login.jsx';
 import Homepage from './components/Homepage.jsx';
 import Register from './components/Register.jsx';
-import Profile from './components/Profile.jsx';
-import Addmin from './components/Addmin.jsx';
 
 import {
   createBrowserRouter,
@@ -36,16 +34,7 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
-  {
-    path: "/profile",
-    element: 
-        <Profile />
-  },
-  {
-    path: "/addmin",
-    element: 
-        <Addmin />
-  },
+
   {
     path: "/homepage",
     element: 
