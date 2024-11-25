@@ -2,10 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { checkBlacklist } = require('./middleware/authMiddleware');
 
 const authRoutes = require('./router/Authentication');
-const postRouter = require('./router/post');
+const postRoutes = require('./router/post');
 
 dotenv.config();
 const app = express();
@@ -20,7 +19,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/api/posts', postRouter);
+app.use('/api/posts', postRoutes);
 app.use('/postimages', express.static('public/postimages'));
 
 // Start server

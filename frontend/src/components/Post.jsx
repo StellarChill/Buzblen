@@ -9,25 +9,29 @@ function PostForm() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ id: null, role: null });
 
-  // ดึงโพสต์ทั้งหมดเมื่อ Component โหลดครั้งแรก
+  // ดึงข้อมูลผู้ใช้จาก JWT
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = JSON.parse(atob(token.split('.')[1])); // Decode JWT Payload
+      setCurrentUser({ id: decoded.id, role: decoded.role });
+    }
+
     const fetchPosts = async () => {
       setLoading(true);
-      setError('');
       try {
         const response = await fetch('http://localhost:5000/api/posts', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
         if (response.ok) {
-          setPosts(data.posts); // สมมติว่า backend คืน posts ใน data.posts
+          setPosts(data.posts);
         } else {
           setError(data.error || 'Failed to fetch posts.');
         }
-      } catch (error) {
+      } catch (err) {
         setError('Error fetching posts. Please try again.');
       } finally {
         setLoading(false);
@@ -37,10 +41,13 @@ function PostForm() {
     fetchPosts();
   }, []);
 
+  const handlePostDeleted = (deletedPostId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.PostID !== deletedPostId));
+  };
+
   const handleTextChange = (e) => setText(e.target.value);
   const handleImageChange = (e) => setImage(e.target.files[0]);
 
-  // สร้างโพสต์ใหม่
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -67,7 +74,7 @@ function PostForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setPosts((prevPosts) => [data.post, ...prevPosts]); // เพิ่มโพสต์ใหม่ไว้ด้านบน
+        setPosts((prevPosts) => [data.post, ...prevPosts]);
         setText('');
         setImage(null);
       } else {
@@ -78,11 +85,6 @@ function PostForm() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // จัดการการลบโพสต์
-  const handlePostDeleted = (deletedPostId) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.PostID !== deletedPostId));
   };
 
   return (
@@ -145,41 +147,48 @@ function PostForm() {
         {loading && <p className="text-center text-gray-500">Loading posts...</p>}
         {posts.length > 0 ? (
           <ul className="space-y-6">
-            {posts.map((post) => (
-              <li
-                key={post.PostID}
-                className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200"
-              >
-                {/* Post Description */}
-                <p className="text-lg font-semibold text-gray-800 mb-3">
-                  {post.PostDescription}
-                </p>
+            {posts.map((post) => {
+              const isOwner = post.EmployeeID === currentUser.id; // ตรวจสอบว่าเป็นเจ้าของโพสต์
+              const isAdmin = currentUser.role === 'admin'; // ตรวจสอบว่าเป็น Admin
 
-                {/* Post Image */}
-                {post.ImageURL && (
-                  <img
-                    src={`http://localhost:5000${post.ImageURL}`}
-                    alt="Post"
-                    className="w-full h-auto rounded-lg mb-4 shadow-md"
-                  />
-                )}
+              return (
+                <li
+                  key={post.PostID}
+                  className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200"
+                >
+                  {/* Post Description */}
+                  <p className="text-lg font-semibold text-gray-800 mb-3">
+                    {post.PostDescription}
+                  </p>
 
-                {/* Buttons Section */}
-                <div className="flex items-center justify-between space-x-4 mt-4">
-                  {/* Like Button */}
-                  <LikeButton postId={post.PostID} />
+                  {/* Post Image */}
+                  {post.ImageURL && (
+                    <img
+                      src={`http://localhost:5000${post.ImageURL}`}
+                      alt="Post"
+                      className="w-full h-auto rounded-lg mb-4 shadow-md"
+                    />
+                  )}
 
-                  {/* Comment Button */}
-                  <CommentButton postId={post.PostID} />
+                  {/* Buttons Section */}
+                  <div className="flex items-center justify-between space-x-4 mt-4">
+                    {/* Like Button */}
+                    <LikeButton postId={post.PostID} />
 
-                  {/* Delete Button */}
-                  <DeleteButton
-                    postId={post.PostID}
-                    onPostDeleted={handlePostDeleted}
-                  />
-                </div>
-              </li>
-            ))}
+                    {/* Comment Button */}
+                    <CommentButton postId={post.PostID} />
+
+                    {/* Delete Button */}
+                    <DeleteButton
+                      postId={post.PostID}
+                      isOwner={isOwner}
+                      isAdmin={isAdmin}
+                      onPostDeleted={handlePostDeleted}
+                    />
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-center text-gray-500">No posts yet. Start sharing your thoughts!</p>

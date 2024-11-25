@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const { PrismaClient } = require('@prisma/client');
-const { checkBlacklist } = require('../middleware/authMiddleware');
+const { authenticateUser } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -17,13 +17,15 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Create a new post
-router.post('/', upload.single('image'), checkBlacklist, async (req, res) => {
+/** -----------------------------------
+ * Create a New Post
+ * ----------------------------------- */
+router.post('/', authenticateUser, upload.single('image'), async (req, res) => {
   const { postDescription } = req.body;
   const employeeId = req.user.id;
 
   if (!postDescription || !req.file) {
-    return res.status(400).json({ error: 'Post description and image are required' });
+    return res.status(400).json({ error: 'Post description and image are required.' });
   }
 
   try {
@@ -40,15 +42,17 @@ router.post('/', upload.single('image'), checkBlacklist, async (req, res) => {
     res.status(201).json({ message: 'Post created successfully', post: newPost });
   } catch (error) {
     console.error('Error creating post:', error);
-    res.status(500).json({ error: 'Error creating post' });
+    res.status(500).json({ error: 'Failed to create post. Please try again later.' });
   }
 });
 
-// Get All Posts
-router.get('/', checkBlacklist, async (req, res) => {
+/** -----------------------------------
+ * Get All Posts
+ * ----------------------------------- */
+router.get('/', authenticateUser, async (req, res) => {
   try {
     const posts = await prisma.postDetails.findMany({
-      where: { IsDeleted: false }, // Only fetch posts that are not deleted
+      where: { IsDeleted: false }, // Fetch only posts that are not deleted
       include: {
         Employee: { select: { Email: true } }, // Include owner email
         Comments: true, // Include comments
@@ -60,12 +64,14 @@ router.get('/', checkBlacklist, async (req, res) => {
     res.status(200).json({ posts });
   } catch (error) {
     console.error('Error fetching posts:', error);
-    res.status(500).json({ error: 'Error fetching posts' });
+    res.status(500).json({ error: 'Failed to fetch posts. Please try again later.' });
   }
 });
 
-// Like or Unlike a post
-router.post('/:id/like', checkBlacklist, async (req, res) => {
+/** -----------------------------------
+ * Like or Unlike a Post
+ * ----------------------------------- */
+router.post('/:id/like', authenticateUser, async (req, res) => {
   const postId = req.params.id;
   const employeeId = req.user.id;
 
@@ -81,7 +87,7 @@ router.post('/:id/like', checkBlacklist, async (req, res) => {
       await prisma.likeDetails.delete({
         where: { LikeID: existingLike.LikeID },
       });
-      return res.status(200).json({ message: 'Post unliked' });
+      return res.status(200).json({ message: 'Post unliked.' });
     }
 
     const newLike = await prisma.likeDetails.create({
@@ -91,21 +97,23 @@ router.post('/:id/like', checkBlacklist, async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: 'Post liked', like: newLike });
+    res.status(201).json({ message: 'Post liked.', like: newLike });
   } catch (error) {
     console.error('Error liking/unliking post:', error);
-    res.status(500).json({ error: 'Error processing like/unlike' });
+    res.status(500).json({ error: 'Failed to like/unlike post. Please try again later.' });
   }
 });
 
-// Add Comment to a Post
-router.post('/:postId/comments', checkBlacklist, async (req, res) => {
+/** -----------------------------------
+ * Add Comment to a Post
+ * ----------------------------------- */
+router.post('/:postId/comments', authenticateUser, async (req, res) => {
   const { postId } = req.params;
   const { commentText } = req.body;
   const employeeId = req.user.id;
 
   if (!commentText) {
-    return res.status(400).json({ error: 'Comment text is required' });
+    return res.status(400).json({ error: 'Comment text is required.' });
   }
 
   try {
@@ -114,7 +122,7 @@ router.post('/:postId/comments', checkBlacklist, async (req, res) => {
     });
 
     if (!postExists) {
-      return res.status(404).json({ error: 'Post not found' });
+      return res.status(404).json({ error: 'Post not found.' });
     }
 
     const newComment = await prisma.commentDetails.create({
@@ -128,49 +136,30 @@ router.post('/:postId/comments', checkBlacklist, async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+    res.status(201).json({ message: 'Comment added successfully.', comment: newComment });
   } catch (error) {
     console.error('Error adding comment:', error);
-    res.status(500).json({ error: 'Error adding comment' });
+    res.status(500).json({ error: 'Failed to add comment. Please try again later.' });
   }
 });
 
-// Get All Comments for a Post
-router.get('/:postId/comments', async (req, res) => {
-  const { postId } = req.params;
-
-  try {
-    const comments = await prisma.commentDetails.findMany({
-      where: { PostID: postId },
-      include: {
-        Employee: { select: { Email: true } },
-      },
-    });
-
-    res.status(200).json({ comments });
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    res.status(500).json({ error: 'Error fetching comments' });
-  }
-});
-
-// Delete a Post (Owner or Admin Only)
-router.delete('/:id', checkBlacklist, async (req, res) => {
+/** -----------------------------------
+ * Delete a Post (Owner or Admin Only)
+ * ----------------------------------- */
+router.delete('/:id', authenticateUser, async (req, res) => {
   const postId = req.params.id;
   const employeeId = req.user.id;
+  const userRole = req.user.role;
 
   try {
-    const post = await prisma.postDetails.findUnique({
-      where: { PostID: postId },
-    });
+    const post = await prisma.postDetails.findUnique({ where: { PostID: postId } });
 
     if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
+      return res.status(404).json({ error: 'Post not found.' });
     }
 
-    // Check if the user is the owner or an admin
-    if (post.EmployeeID !== employeeId && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: You do not have permission to delete this post' });
+    if (post.EmployeeID !== employeeId && userRole !== 'admin') {
+      return res.status(403).json({ error: 'You do not have permission to delete this post.' });
     }
 
     await prisma.postDetails.update({
@@ -178,11 +167,12 @@ router.delete('/:id', checkBlacklist, async (req, res) => {
       data: { IsDeleted: true },
     });
 
-    res.status(200).json({ message: 'Post deleted successfully' });
+    res.status(200).json({ message: 'Post deleted successfully.' });
   } catch (error) {
     console.error('Error deleting post:', error);
-    res.status(500).json({ error: 'Error deleting post' });
+    res.status(500).json({ error: 'Failed to delete post. Please try again later.' });
   }
 });
+
 
 module.exports = router;
