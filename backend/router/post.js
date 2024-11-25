@@ -61,7 +61,12 @@ router.get('/', authenticateUser, async (req, res) => {
       orderBy: { DateCreated: 'desc' }, // Order by newest first
     });
 
-    res.status(200).json({ posts });
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      likeCount: post.Likes.length, // Add like count to each post
+    }));
+
+    res.status(200).json({ posts: formattedPosts });
   } catch (error) {
     console.error('Error fetching posts:', error);
     res.status(500).json({ error: 'Failed to fetch posts. Please try again later.' });
@@ -87,17 +92,19 @@ router.post('/:id/like', authenticateUser, async (req, res) => {
       await prisma.likeDetails.delete({
         where: { LikeID: existingLike.LikeID },
       });
-      return res.status(200).json({ message: 'Post unliked.' });
+      const likeCount = await prisma.likeDetails.count({ where: { PostID: postId } });
+      return res.status(200).json({ message: 'Post unliked.', likeCount });
     }
 
-    const newLike = await prisma.likeDetails.create({
+    await prisma.likeDetails.create({
       data: {
         EmployeeID: employeeId,
         PostID: postId,
       },
     });
 
-    res.status(201).json({ message: 'Post liked.', like: newLike });
+    const likeCount = await prisma.likeDetails.count({ where: { PostID: postId } });
+    res.status(201).json({ message: 'Post liked.', likeCount });
   } catch (error) {
     console.error('Error liking/unliking post:', error);
     res.status(500).json({ error: 'Failed to like/unlike post. Please try again later.' });
@@ -130,9 +137,6 @@ router.post('/:postId/comments', authenticateUser, async (req, res) => {
         EmployeeID: employeeId,
         PostID: postId,
         CommentText: commentText,
-      },
-      include: {
-        Employee: { select: { Email: true } },
       },
     });
 
@@ -173,6 +177,5 @@ router.delete('/:id', authenticateUser, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete post. Please try again later.' });
   }
 });
-
 
 module.exports = router;

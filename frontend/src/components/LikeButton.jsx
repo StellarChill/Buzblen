@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-function LikeButton({ postId }) {
+function LikeButton({ postId, initialLikeCount }) {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(initialLikeCount || 0);
 
   useEffect(() => {
     const fetchLikes = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/posts/${postId}/likes`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error('Failed to fetch likes');
         }
+
         const data = await response.json();
-        setLikeCount(data.likes.length);
-        setLiked(data.likes.some((like) => like.EmployeeID === localStorage.getItem('userId')));
+        setLikeCount(data.likeCount);
+        setLiked(data.userLiked);
       } catch (error) {
         console.error('Error fetching likes:', error);
       }
@@ -34,24 +40,25 @@ function LikeButton({ postId }) {
     try {
       const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        alert(data.message);
+        return;
       }
 
+      const data = await response.json();
       setLiked(!liked);
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+      setLikeCount(data.likeCount);
     } catch (error) {
-      console.error('Error handling like:', error);
+      console.error('Error liking/unliking post:', error);
     }
   };
 
   return (
-    <div className="sticky top-0">
+    <div>
       <button
         onClick={handleLike}
         className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium transition ${

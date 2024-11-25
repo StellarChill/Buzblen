@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CommentButton from './CommentButton';
-import LikeButton from './LikeButton';
+import LikeButton from './likebutton';
 import DeleteButton from './DeleteButton';
 
 function PostForm() {
