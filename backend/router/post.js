@@ -1,8 +1,7 @@
 const express = require('express');
 const multer = require('multer');
-const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client');
-const { checkBlacklist, verifyAdmin } = require('../middleware/authMiddleware');
+const { checkBlacklist } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -16,27 +15,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
-
 const upload = multer({ storage });
-
-// Middleware to ensure the user is updated to admin if credentials match
-const ensureAdminRole = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (email === 'admin@admin.com' && password === 'admin') {
-    const user = await prisma.employeeDetails.findUnique({
-      where: { Email: email },
-    });
-
-    if (user && user.Role !== 'admin') {
-      await prisma.employeeDetails.update({
-        where: { Email: email },
-        data: { Role: 'admin' },
-      });
-    }
-  }
-  next();
-};
 
 // Create a new post
 router.post('/', upload.single('image'), checkBlacklist, async (req, res) => {
@@ -62,6 +41,26 @@ router.post('/', upload.single('image'), checkBlacklist, async (req, res) => {
   } catch (error) {
     console.error('Error creating post:', error);
     res.status(500).json({ error: 'Error creating post' });
+  }
+});
+
+// Get All Posts
+router.get('/', checkBlacklist, async (req, res) => {
+  try {
+    const posts = await prisma.postDetails.findMany({
+      where: { IsDeleted: false }, // Only fetch posts that are not deleted
+      include: {
+        Employee: { select: { Email: true } }, // Include owner email
+        Comments: true, // Include comments
+        Likes: true, // Include likes
+      },
+      orderBy: { DateCreated: 'desc' }, // Order by newest first
+    });
+
+    res.status(200).json({ posts });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ error: 'Error fetching posts' });
   }
 });
 

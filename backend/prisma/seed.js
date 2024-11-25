@@ -4,11 +4,13 @@ const bcrypt = require('bcrypt');
 const prisma = new PrismaClient();
 
 async function main() {
+  // Hash password for the admin user
   const adminPassword = await bcrypt.hash('admin', 10);
 
+  // Create admin user
   await prisma.employeeDetails.upsert({
     where: { Email: 'admin@admin.com' },
-    update: {},
+    update: {}, // If already exists, do nothing
     create: {
       Email: 'admin@admin.com',
       Password: adminPassword,
@@ -21,7 +23,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Error seeding data:', e);
     process.exit(1);
   })
   .finally(async () => {

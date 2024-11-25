@@ -4,26 +4,24 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { checkBlacklist } = require('./middleware/authMiddleware');
 
-const authRoutes = require('./router/Authentication'); // Correct Authentication path
-const postRouter = require('./router/post'); // Correct post router path
-const commentRouter = require('./router/comment'); // Correct comment router path
+const authRoutes = require('./router/Authentication');
+const postRouter = require('./router/post');
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Frontend origin
+  origin: 'http://localhost:5173',
   credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/auth', authRoutes); // Authentication routes
-app.use('/api/posts', postRouter); // Post routes
-app.use('/api/comments', commentRouter); // Comment routes
-app.use('/postimages', express.static('public/postimages')); // Serve uploaded images
+app.use('/auth', authRoutes);
+app.use('/api/posts', postRouter);
+app.use('/postimages', express.static('public/postimages'));
 
 // Start server
 const PORT = process.env.PORT || 5000;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
@@ -10,10 +10,37 @@ function PostForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // ดึงโพสต์ทั้งหมดเมื่อ Component โหลดครั้งแรก
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await fetch('http://localhost:5000/api/posts', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setPosts(data.posts); // สมมติว่า backend คืน posts ใน data.posts
+        } else {
+          setError(data.error || 'Failed to fetch posts.');
+        }
+      } catch (error) {
+        setError('Error fetching posts. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const handleTextChange = (e) => setText(e.target.value);
   const handleImageChange = (e) => setImage(e.target.files[0]);
 
-  // ฟังก์ชันสำหรับสร้างโพสต์ใหม่
+  // สร้างโพสต์ใหม่
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -33,16 +60,14 @@ function PostForm() {
     try {
       const response = await fetch('http://localhost:5000/api/posts', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setPosts((prevPosts) => [...prevPosts, data.post]);
+        setPosts((prevPosts) => [data.post, ...prevPosts]); // เพิ่มโพสต์ใหม่ไว้ด้านบน
         setText('');
         setImage(null);
       } else {
@@ -55,7 +80,7 @@ function PostForm() {
     }
   };
 
-  // ฟังก์ชันสำหรับจัดการโพสต์ที่ถูกลบ
+  // จัดการการลบโพสต์
   const handlePostDeleted = (deletedPostId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.PostID !== deletedPostId));
   };
@@ -101,9 +126,7 @@ function PostForm() {
             accept="image/*"
           />
         </div>
-        {error && (
-          <p className="text-red-500 text-sm font-medium">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
         <button
           type="submit"
           className={`w-full py-2 px-4 text-white text-lg font-medium rounded-lg ${
@@ -119,11 +142,12 @@ function PostForm() {
 
       {/* Posts Section */}
       <div>
+        {loading && <p className="text-center text-gray-500">Loading posts...</p>}
         {posts.length > 0 ? (
           <ul className="space-y-6">
-            {posts.map((post, index) => (
+            {posts.map((post) => (
               <li
-                key={index}
+                key={post.PostID}
                 className="p-6 bg-gray-50 rounded-lg shadow border border-gray-200"
               >
                 {/* Post Description */}
@@ -143,30 +167,22 @@ function PostForm() {
                 {/* Buttons Section */}
                 <div className="flex items-center justify-between space-x-4 mt-4">
                   {/* Like Button */}
-                  <div className="flex-shrink-0">
-                    <LikeButton postId={post.PostID} />
-                  </div>
+                  <LikeButton postId={post.PostID} />
 
                   {/* Comment Button */}
-                  <div className="flex-grow">
-                    <CommentButton postId={post.PostID} />
-                  </div>
+                  <CommentButton postId={post.PostID} />
 
                   {/* Delete Button */}
-                  <div className="flex-grow">
-                    <DeleteButton
-                      postId={post.PostID}
-                      onPostDeleted={handlePostDeleted}
-                    />
-                  </div>
+                  <DeleteButton
+                    postId={post.PostID}
+                    onPostDeleted={handlePostDeleted}
+                  />
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-center text-gray-500">
-            No posts yet. Start sharing your thoughts!
-          </p>
+          <p className="text-center text-gray-500">No posts yet. Start sharing your thoughts!</p>
         )}
       </div>
     </div>
